@@ -9,6 +9,9 @@ Variations from the original exercise:
 */
 
 import test from 'ava'
+import words from './127-word-ladder-words'
+
+const wordList = ['hit', 'hot', 'dot', 'dog', 'lot', 'log', 'cog', 'zip']
 
 test('brute force - finds path', t => {
   t.deepEqual(transformBruteForce('hit', 'cog'), ['hit', 'hot', 'dot', 'dog', 'cog'])
@@ -22,16 +25,79 @@ test('brute force - not a valid word', t => {
   t.deepEqual(transformBruteForce('hit', 'bot'), [])
 })
 
+const buildNodeFor = word =>
+  ({word, children: []})
+
+const oneTranformationAway = (begin, end) => {
+  if (begin.length !== end.length) {
+    return false
+  }
+
+  let diffs = 0
+  for (let i = 0; i < begin.length; i++) {
+    if (begin[i] !== end[i]) {
+      diffs++
+    }
+  }
+
+  return diffs === 1
+}
+
+// O(w^2*len(w))
+const buildGraphFrom = words => {
+  const map = {}
+  for (let word of words) {
+    map[word] = buildNodeFor(word)
+  }
+
+  for (let from of words) {
+    const node = map[from]
+    for (let to of words) {
+      if (oneTranformationAway(from, to)) {
+        node.children.push(map[to])
+      }
+    }
+  }
+  return map
+}
+
+const graph = buildGraphFrom(wordList)
+
 test('graph - finds path', t => {
-  t.deepEqual(transformGraph('hit', 'cog'), ['hit', 'hot', 'dot', 'dog', 'cog'])
+  t.deepEqual(transformGraph('hit', 'cog', graph), ['hit', 'hot', 'dot', 'dog', 'cog'])
 })
 
 test('graph - no path', t => {
-  t.deepEqual(transformBruteForce('hit', 'zip'), [])
+  t.deepEqual(transformBruteForce('hit', 'zip', graph), [])
 })
 
 test('graph - not a valid word', t => {
-  t.deepEqual(transformGraph('hit', 'bot'), [])
+  t.deepEqual(transformGraph('hit', 'bot', graph), [])
+})
+
+test('leet - for upload', t => {
+  t.is(transformLeet('hit', 'cog', wordList), 5)
+})
+
+test('leet - build long graph', t => {
+  const wordList = words.fourCharacterWords
+  t.is(wordList.length, 2855)
+
+  const start = new Date()
+  const graph = buildGraphFrom(words.fourCharacterWords)
+  const elapsed = new Date() - start
+
+  t.is(Object.keys(graph).length, wordList.length)
+  t.truthy(elapsed / 1000.0 < 1)
+})
+
+test.skip('leet - find in long word list', t => {
+  const start = new Date()
+  const pathLength = transformLeet('sand', 'acne', words.fourCharacterWords)
+  const elapsed = new Date() - start
+
+  t.is(pathLength, 11)
+  t.truthy(elapsed / 1000.0 < 1) // should run in less than 1 sec - 1.4 sec at the moment
 })
 
 const allChars = function * () {
@@ -43,10 +109,12 @@ const allChars = function * () {
     current++
   }
 }
+
 const chars = Array.from(allChars())
+
 const replace = (index, c, word) =>
   word.substr(0, index) + c + word.substr(index + 1)
-const wordList = ['hit', 'hot', 'dot', 'dog', 'lot', 'log', 'cog', 'zip']
+
 const isNotAWord = value =>
   !wordList.includes(value)
 
@@ -83,44 +151,13 @@ const transformBruteForce = (beginWord, endWord, index, steps = []) => {
   return []
 }
 
-const buildNodeFor = word =>
-  ({word, children: []})
-
-const oneTranformationAway = (begin, end) => {
-  if (begin.length !== end.length) {
-    return false
-  }
-
-  let diffs = 0
-  for (let i in begin) {
-    if (begin[i] !== end[i]) {
-      diffs++
-    }
-  }
-
-  return diffs === 1
-}
-
-// O(N**2)
-const buildGraphFrom = words => {
-  const map = words.reduce((acc, cur) => { acc[cur] = buildNodeFor(cur); return acc }, {})
-  for (let from of words) {
-    const node = map[from]
-    for (let to of words) {
-      if (oneTranformationAway(from, to)) {
-        node.children.push(map[to])
-      }
-    }
-  }
-  return map
-}
-
 const isUndefined = obj =>
   typeof obj === 'undefined'
-const not = fn => val =>
-  !fn(val)
+
+const not = fn => (...val) =>
+  !fn(...val)
+
 const isNotUndefined = not(isUndefined)
-const graph = buildGraphFrom(wordList)
 
 const addNotVisitedChildrenThatAreNotInQueue = (node, visited, queue) => {
   if (!node.children) {
@@ -134,6 +171,7 @@ const addNotVisitedChildrenThatAreNotInQueue = (node, visited, queue) => {
       .map(c => Object.assign({}, c, {from: node.word}))
   )
 }
+
 const buildPath = (from, visited) => {
   let path = []
   let current = from
@@ -143,12 +181,18 @@ const buildPath = (from, visited) => {
   }
   return path
 }
-const transformGraph = (beginWord, endWord) => {
-  if (isNotAWord(beginWord)) {
+
+const includes = (item, dict) =>
+  isNotUndefined(dict[item])
+
+const doesNotInclude = not(includes)
+
+const transformGraph = (beginWord, endWord, graph) => {
+  if (doesNotInclude(beginWord, graph)) {
     return []
   }
 
-  if (isNotAWord(endWord)) {
+  if (doesNotInclude(endWord, graph)) {
     return []
   }
 
@@ -172,4 +216,10 @@ const transformGraph = (beginWord, endWord) => {
   }
 
   return []
+}
+
+const transformLeet = (beginWord, endWord, wordList) => {
+  const graph = buildGraphFrom([...wordList, beginWord])
+  const path = transformGraph(beginWord, endWord, graph)
+  return path.length
 }
