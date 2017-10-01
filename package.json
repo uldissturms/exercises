@@ -1,0 +1,23 @@
+{
+  "name": "exercises",
+  "version": "1.0.0",
+  "description": "coding exercises",
+  "main": "index.js",
+  "repository": "git@github.com:uldissturms/exercises.git",
+  "author": "Uldis Sturms <uldis.sturms@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "ava",
+    "test:dev": "npm run test -- -w",
+    "lint": "standard",
+    "lint:pretty": "npm run lint | snazzy"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0"
+  },
+  "dependencies": {
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3"
+  }
+}
