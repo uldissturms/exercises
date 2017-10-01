@@ -9,7 +9,7 @@ Variations from the original exercise:
 */
 
 import test from 'ava'
-import words from './127-word-ladder-words'
+import words from './127-word-ladder-words.data'
 
 const wordList = ['hit', 'hot', 'dot', 'dog', 'lot', 'log', 'cog', 'zip']
 
