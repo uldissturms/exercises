@@ -70,24 +70,34 @@ const oneTranformationAway = (begin, end) => {
 }
 
 const wordsOneTransformationAwayFrom = (word, words) =>
-  words.filter(w => oneTranformationAway(word, w))
-
-const nonDiscovered = (words, discovered) =>
-  words.filter(word => isUndefined(discovered[word]))
+  words
+    .filter(w => oneTranformationAway(word, w))
 
 const addFrom = (from, words) =>
   words.map(word => ({from, word}))
 
-const markAsDiscovered = (words, dict = {}) => {
+const markAsDiscovered = (words, dict) => {
   for (let word of words) {
-    dict[word] = true
+    delete dict[word]
   }
 
   return dict
 }
 
+const toMap = items => {
+  const map = {}
+  for (let item of items) {
+    map[item] = true
+  }
+  return map
+}
+
+// keep only list of undiscovered words
 const transformLazy = (beginWord, endWord, wordList) => {
-  const discovered = markAsDiscovered([beginWord])
+  const undiscovered = toMap(wordList)
+  markAsDiscovered([beginWord], undiscovered)
+  let undiscoveredKeys = Object.keys(undiscovered)
+
   const visited = []
   const queue = []
   let current = {word: beginWord}
@@ -98,12 +108,16 @@ const transformLazy = (beginWord, endWord, wordList) => {
       return buildPath(current, visited)
     }
 
-    const toBeDiscovered = nonDiscovered(
-      wordsOneTransformationAwayFrom(current.word, wordList),
-      discovered
+    const toBeDiscovered = wordsOneTransformationAwayFrom(
+      current.word,
+      undiscoveredKeys
     )
-    markAsDiscovered(toBeDiscovered, discovered)
-    queue.push(...addFrom(current.word, toBeDiscovered))
+
+    if (toBeDiscovered.length > 0) {
+      markAsDiscovered(toBeDiscovered, undiscovered)
+      undiscoveredKeys = Object.keys(undiscovered)
+      queue.push(...addFrom(current.word, toBeDiscovered))
+    }
 
     current = queue.shift()
   }
