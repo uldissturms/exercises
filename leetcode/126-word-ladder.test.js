@@ -6,7 +6,7 @@ import {transform, discoverLevel, init, toMap} from './word-ladder'
 const wordList = ['hot', 'dot', 'dog', 'lot', 'log', 'cog', 'zip']
 
 // TODO: update discovered keys once per level, many items can be converging to the same element
-test.only('match', t => {
+test('match', t => {
   t.deepEqual(transform('hit', 'cog', wordList), [
     ['hit', 'hot', 'dot', 'dog', 'cog'],
     ['hit', 'hot', 'lot', 'log', 'cog']
