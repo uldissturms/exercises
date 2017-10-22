@@ -1,6 +1,29 @@
 const head = ([x]) =>
   x
 
+const flatMap = (fn, items) => {
+  const res = []
+  for (let item of items) {
+    res.push(...fn(item))
+  }
+
+  return res
+}
+
+const equal = (left, right) =>
+  left.length === right.length && left.every((l, i) => l === right[i])
+
+const unique = items => {
+  const res = []
+  for (let item of items) {
+    if (!res.some(r => equal(r, item))) {
+      res.push(item)
+    }
+  }
+
+  return res
+}
+
 const isUndefined = obj =>
   typeof obj === 'undefined'
 
@@ -9,20 +32,11 @@ const not = fn => (...val) =>
 
 const isNotUndefined = not(isUndefined)
 
-const pathTo = (type, word, discovered) => {
-  let path = []
-  let prev
-  let current = word
-  while (current !== prev) {
-    prev = current
-    path = [current, ...path]
-    current = discovered[current][type]
-  }
-  return path
-}
-
 const reverse = items => {
-  items.reverse()
+  for (let item of items) {
+    item.reverse()
+  }
+
   return items
 }
 
@@ -78,15 +92,50 @@ const init = (type, word, undiscovered) => {
   }
 }
 
+const assocPath = (path, value, object) => {
+  const current = path[0]
+
+  if (path.length === 1) {
+    object[current] = value
+    return object
+  }
+
+  if (isUndefined(object[current])) {
+    object[current] = {}
+  }
+
+  return assocPath(path.slice(1), value, object[current])
+}
+
+const path = (value, object) => {
+  if (isUndefined(object)) {
+    return undefined
+  }
+
+  const current = value[0]
+
+  if (value.length === 1) {
+    return object[current]
+  }
+
+  return path(value.slice(1), object[current])
+}
+
 const discover = (state, discovered) => {
-  discovered[state.current.word] = Object.assign({}, discovered[state.current.word], {[state.type]: state.current.from})
+  const {word, level, from} = state.current
+
+  assocPath(
+    [word, state.type],
+    [...(path([word, state.type], discovered) || []), from],
+    discovered
+  )
 
   const toBeDiscovered = wordsOneTransformationAwayFrom(
-    state.current.word,
+    word,
     state.undiscoveredKeys
   )
 
-  return withTrackingInfo(state.current.word, state.current.level + 1, toBeDiscovered)
+  return withTrackingInfo(word, level + 1, toBeDiscovered)
 }
 
 const next = state => {
@@ -99,15 +148,29 @@ const pathsCrossed = ({current}, discovered) =>
     isNotUndefined(discovered[current.word].start) &&
     isNotUndefined(discovered[current.word].end)
 
-const buildPathFrom = ({word}, discovered) => {
-  const {start, end} = discovered[word]
-  const path = []
-  path.push(...pathTo('start', start, discovered))
-  if (start !== word && end !== word) {
-    path.push(word)
+const product = (left, right) =>
+  flatMap(r => left.map(l => [...r, ...l]), right)
+
+const pathsTo = (type, words, discovered) => {
+  if (words.length === 1 && equal(discovered[head(words)][type], words)) {
+    return [words]
   }
-  path.push(...reverse(pathTo('end', end, discovered)))
-  return path
+
+  return flatMap(
+    w => pathsTo(type, discovered[w][type], discovered).map(p => [...p, w]),
+    words
+  )
+}
+
+const buildPathsFrom = (word, discovered) => {
+  const {start, end} = discovered[word]
+  let paths = pathsTo('start', start, discovered)
+  if (!equal(start, [word]) && !equal(end, [word])) {
+    paths = paths.map(p => [...p, word])
+  }
+  paths = product(reverse(pathsTo('end', end, discovered)), paths)
+
+  return paths
 }
 
 const words = objects =>
@@ -123,8 +186,7 @@ const discoverLevel = (state, discovered) => {
     toBeDiscovered.push(...children)
     state.queue.push(...children)
     if (pathsCrossed(state, discovered)) {
-      const path = buildPathFrom(state.current, discovered)
-      paths = [...paths, path]
+      paths = [...paths, ...buildPathsFrom(state.current.word, discovered)]
     }
     next(state)
   }
@@ -135,7 +197,7 @@ const discoverLevel = (state, discovered) => {
     state.levels[level + 1] = toBeDiscovered.length
   }
 
-  return paths
+  return unique(paths)
 }
 
 const shortest = paths => {
