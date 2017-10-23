@@ -121,18 +121,18 @@ const path = (value, object) => {
   return path(value.slice(1), object[current])
 }
 
-const discover = (state, discovered) => {
-  const {word, level, from} = state.current
+const discover = ({type, current, undiscoveredKeys}, discovered) => {
+  const {word, level, from} = current
 
   assocPath(
-    [word, state.type],
-    [...(path([word, state.type], discovered) || []), from],
+    [word, type],
+    [...(path([word, type], discovered) || []), from],
     discovered
   )
 
   const toBeDiscovered = wordsOneTransformationAwayFrom(
     word,
-    state.undiscoveredKeys
+    undiscoveredKeys
   )
 
   return withTrackingInfo(word, level + 1, toBeDiscovered)
@@ -168,9 +168,7 @@ const buildPathsFrom = (word, discovered) => {
   if (!equal(start, [word]) && !equal(end, [word])) {
     paths = paths.map(p => [...p, word])
   }
-  paths = product(reverse(pathsTo('end', end, discovered)), paths)
-
-  return paths
+  return product(reverse(pathsTo('end', end, discovered)), paths)
 }
 
 const words = objects =>

@@ -27,7 +27,7 @@ test.skip('long leet list', t => {
   t.is(words.length, 1648)
 
   const time = process.hrtime()
-  const paths = transform('zings', 'brown', fiveCharWords.words)
+  const paths = transform('zings', 'brown', words)
   const [sec] = process.hrtime(time)
 
   t.is(paths.length, 127)

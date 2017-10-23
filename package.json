@@ -11,12 +11,16 @@
     "test": "ava",
     "test:dev": "npm run test -- -w",
     "lint": "standard",
-    "lint:pretty": "npm run lint | snazzy"
+    "lint:pretty": "npm run lint | snazzy",
+    "bench": "node bench"
   },
   "devDependencies": {
     "ava": "^0.22.0"
   },
   "dependencies": {
+    "benchmark": "^2.1.4",
+    "cli-table": "^0.3.1",
+    "glob": "^7.1.2",
     "snazzy": "^7.0.0",
     "standard": "^10.0.3"
   },
