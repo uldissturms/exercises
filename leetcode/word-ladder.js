@@ -123,10 +123,14 @@ const path = (value, object) => {
 
 const discover = ({type, current, undiscoveredKeys}, discovered) => {
   const {word, level, from} = current
+  const alreadyDiscoveredFrom = path([word, type], discovered) || []
+  if (alreadyDiscoveredFrom.includes(from)) {
+    return []
+  }
 
   assocPath(
     [word, type],
-    [...(path([word, type], discovered) || []), from],
+    [...alreadyDiscoveredFrom, from],
     discovered
   )
 
@@ -175,7 +179,7 @@ const words = objects =>
   objects.map(({word}) => word)
 
 const discoverLevel = (state, discovered) => {
-  const level = state.current.level
+  const {level} = state.current
   let paths = []
   const toBeDiscovered = []
 

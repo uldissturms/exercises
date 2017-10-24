@@ -22,7 +22,7 @@ test('multiple paths for same intersection', t => {
   ])
 })
 
-test.skip('long leet list', t => {
+test('long leet list', t => {
   const words = fiveCharWords.words
   t.is(words.length, 1648)
 
