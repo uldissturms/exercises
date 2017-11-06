@@ -1,14 +1,4 @@
-const head = ([x]) =>
-  x
-
-const flatMap = (fn, items) => {
-  const res = []
-  for (let item of items) {
-    res.push(...fn(item))
-  }
-
-  return res
-}
+const {isUndefined, isNotUndefined, head, flatMap} = require('./helpers')
 
 const equal = (left, right) =>
   left.length === right.length && left.every((l, i) => l === right[i])
@@ -23,14 +13,6 @@ const unique = items => {
 
   return res
 }
-
-const isUndefined = obj =>
-  typeof obj === 'undefined'
-
-const not = fn => (...val) =>
-  !fn(...val)
-
-const isNotUndefined = not(isUndefined)
 
 const reverse = items => {
   for (let item of items) {
