@@ -1,4 +1,4 @@
-const {isUndefined, isNotUndefined, head, flatMap} = require('./helpers')
+const {isUndefined, isNotUndefined, head, flatMap} = require('../helpers')
 
 const equal = (left, right) =>
   left.length === right.length && left.every((l, i) => l === right[i])

@@ -1,7 +1,7 @@
 // [https://leetcode.com/problems/basic-calculator]
 
 import test from 'ava'
-import {isUndefined, isNotUndefined, not} from './helpers'
+import {isUndefined, isNotUndefined, not} from '../helpers'
 
 test('support single number', t => {
   t.is(calculate('1'), 1)

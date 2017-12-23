@@ -1,5 +1,5 @@
 import test from 'ava'
-import {isUndefined} from './helpers'
+import {isUndefined} from '../helpers'
 
 test('one majority number', t => {
   t.deepEqual(majority([1, 5, 3, 5]), [5])

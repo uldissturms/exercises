@@ -9,6 +9,14 @@ const isNotUndefined = not(isUndefined)
 const head = ([x]) =>
   x
 
+const last = items => {
+  if (isUndefined(items)) {
+    return items
+  }
+
+  return items[items.length - 1]
+}
+
 const flatMap = (fn, items) => {
   const res = []
   for (let item of items) {
@@ -18,10 +26,20 @@ const flatMap = (fn, items) => {
   return res
 }
 
+const prop = (name, obj) => {
+  if (isUndefined(obj)) {
+    return obj
+  }
+
+  return obj[name]
+}
+
 module.exports = {
   isUndefined,
   isNotUndefined,
   not,
   flatMap,
-  head
+  head,
+  last,
+  prop
 }

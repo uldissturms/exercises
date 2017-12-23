@@ -1,4 +1,4 @@
-const {isUndefined} = require('./helpers')
+const {isUndefined} = require('../helpers')
 
 // TODO: implement proper hashing function
 const hashForKey = key => key
