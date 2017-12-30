@@ -1,6 +1,12 @@
 const isUndefined = obj =>
   typeof obj === 'undefined'
 
+const isEmpty = obj =>
+  obj === ''
+
+const isUndefinedOrEmpty = obj =>
+  isUndefined(obj) || isEmpty(obj)
+
 const not = fn => (...val) =>
   !fn(...val)
 
@@ -37,6 +43,7 @@ const prop = (name, obj) => {
 module.exports = {
   isUndefined,
   isNotUndefined,
+  isUndefinedOrEmpty,
   not,
   flatMap,
   head,
