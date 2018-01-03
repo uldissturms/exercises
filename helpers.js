@@ -40,6 +40,16 @@ const prop = (name, obj) => {
   return obj[name]
 }
 
+const indent = 4
+const traverseTree = (n, level = 0) => {
+  if (isUndefined(n)) {
+    return
+  }
+  traverseTree(n.left, level + 1)
+  console.log(new Array(level * indent).join(' '), n.data)
+  traverseTree(n.right, level + 1)
+}
+
 module.exports = {
   isUndefined,
   isNotUndefined,
@@ -48,5 +58,6 @@ module.exports = {
   flatMap,
   head,
   last,
-  prop
+  prop,
+  traverseTree
 }
