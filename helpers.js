@@ -1,6 +1,9 @@
 const isUndefined = obj =>
   typeof obj === 'undefined'
 
+const isNull = obj =>
+  obj === null
+
 const isEmpty = obj =>
   obj === ''
 
@@ -11,6 +14,7 @@ const not = fn => (...val) =>
   !fn(...val)
 
 const isNotUndefined = not(isUndefined)
+const isNotNull = not(isNull)
 
 const head = ([x]) =>
   x
@@ -40,6 +44,10 @@ const prop = (name, obj) => {
   return obj[name]
 }
 
+const set = (name, obj) => val => {
+  obj[name] = val
+}
+
 const indent = 4
 const traverseTree = (n, level = 0) => {
   if (isUndefined(n)) {
@@ -52,12 +60,16 @@ const traverseTree = (n, level = 0) => {
 
 module.exports = {
   isUndefined,
+  isNull,
   isNotUndefined,
+  isNotNull,
   isUndefinedOrEmpty,
   not,
   flatMap,
   head,
   last,
   prop,
-  traverseTree
+  set,
+  traverseTree,
+  isEmpty
 }
