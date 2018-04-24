@@ -19,6 +19,9 @@ const isNotNull = not(isNull)
 const head = ([x]) =>
   x
 
+const tail = arr =>
+  arr.slice(1)
+
 const last = items => {
   if (isUndefined(items)) {
     return items
@@ -46,6 +49,19 @@ const prop = (name, obj) => {
 
 const set = (name, obj) => val => {
   obj[name] = val
+  return obj
+}
+
+const path = (arr, obj) => {
+  if (isUndefined(obj)) {
+    return obj
+  }
+
+  if (arr.length === 1) {
+    return obj[head(arr)]
+  }
+
+  return path(tail(arr), obj[head(arr)])
 }
 
 const indent = 4
@@ -67,8 +83,10 @@ module.exports = {
   not,
   flatMap,
   head,
+  tail,
   last,
   prop,
+  path,
   set,
   traverseTree,
   isEmpty
