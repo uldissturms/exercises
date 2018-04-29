@@ -18,9 +18,9 @@
     "ava": "^0.25.0"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^0.10.3",
     "benchmark": "^2.1.4",
     "cli-table": "^0.3.1",
+    "convnet": "^1.0.0",
     "glob": "^7.1.2",
     "snazzy": "^7.0.0",
     "standard": "^10.0.3"

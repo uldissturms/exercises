@@ -1,3 +1,5 @@
 node_modules
 *.ignore
 *.log
+.cache
+dist
