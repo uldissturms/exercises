@@ -18,6 +18,7 @@
     "ava": "^0.24.0"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^0.10.3",
     "benchmark": "^2.1.4",
     "cli-table": "^0.3.1",
     "glob": "^7.1.2",
