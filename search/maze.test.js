@@ -1,6 +1,10 @@
 import test from 'ava'
 import bfs from './maze-bfs'
-import {cell} from './maze'
+import {cell, dist} from './maze'
+
+test('calculate distance', t => {
+  t.is(dist({row: 1, col: 1}, {row: 4, col: 5}), 5)
+})
 
 test('empty path when already at destination', t => {
   const start = {row: 0, col: 0}

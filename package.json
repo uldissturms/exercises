@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "benchmark": "^2.1.4",
+    "chalk": "^2.4.1",
     "cli-table": "^0.3.1",
     "convnet": "^1.0.0",
     "glob": "^7.1.2",

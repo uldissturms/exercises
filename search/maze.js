@@ -19,10 +19,14 @@ const childrenFor = ({row, col}, maze) => [
   findCell(row + 1, col, maze)
 ].filter(isNotUndefined)
 
+const dist = (start, end) =>
+  Math.sqrt((end.row - start.row) ** 2 + (end.col - start.col) ** 2)
+
 module.exports = {
   cell,
   eq,
   keyFor,
   findCell,
-  childrenFor
+  childrenFor,
+  dist
 }
