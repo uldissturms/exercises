@@ -74,6 +74,20 @@ const traverseTree = (n, level = 0) => {
   traverseTree(n.right, level + 1)
 }
 
+const flattenBy = fn => arr =>
+  arr.reduce(
+    (acc, cur) => fn(cur)
+      ? [...acc, ...flattenBy(fn)(cur)]
+      : [...acc, cur],
+    []
+  )
+
+const isArray = x => Array.isArray(x)
+const flatten = flattenBy(isArray)
+
+const plus = (acc, cur) => acc + cur
+const sum = arr => arr.reduce(plus, 0)
+
 module.exports = {
   isUndefined,
   isNull,
@@ -89,5 +103,9 @@ module.exports = {
   path,
   set,
   traverseTree,
-  isEmpty
+  isEmpty,
+  flatten,
+  flattenBy,
+  isArray,
+  sum
 }
