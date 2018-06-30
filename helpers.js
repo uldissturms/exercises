@@ -15,6 +15,7 @@ const not = fn => (...val) =>
 
 const isNotUndefined = not(isUndefined)
 const isNotNull = not(isNull)
+const isNotEmpty = not(isEmpty)
 
 const head = ([x]) =>
   x
@@ -88,11 +89,45 @@ const flatten = flattenBy(isArray)
 const plus = (acc, cur) => acc + cur
 const sum = arr => arr.reduce(plus, 0)
 
+const compose = (...fns) => obj =>
+  fns.reduceRight((acc, cur) => cur(acc), obj)
+
+const all = fn => xs =>
+  xs.reduce((acc, cur) => acc && fn(cur), true)
+
+const reverse = l => {
+  if (l.length === 0) {
+    return l
+  }
+
+  const [x, ...xs] = l
+  return [...reverse(xs), x]
+}
+
+const map = fn => xs =>
+  xs.map(fn)
+
+const filter = fn => xs =>
+  xs.filter(fn)
+
+const snd = ([x, y]) => y
+const skipWhile = fn =>
+  compose(
+    snd,
+    xs => xs.reduce(
+      ([s, l], c) => s && fn(c)
+        ? [true, []]
+        : [false, [...l, c]],
+      [true, []]
+    )
+  )
+
 module.exports = {
   isUndefined,
   isNull,
   isNotUndefined,
   isNotNull,
+  isNotEmpty,
   isUndefinedOrEmpty,
   not,
   flatMap,
@@ -107,5 +142,11 @@ module.exports = {
   flatten,
   flattenBy,
   isArray,
-  sum
+  sum,
+  compose,
+  all,
+  reverse,
+  map,
+  filter,
+  skipWhile
 }
