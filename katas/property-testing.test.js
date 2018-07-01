@@ -12,10 +12,11 @@ import {
   last,
   all,
   reverse,
-  skipWhile
+  skipWhile,
+  randomOf
 } from '../helpers'
 
-const letter = 'M'
+const letter = randomOf('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 test('diamond is non-empty', t => {
   t.true(isNotEmpty(diamond(letter)))
@@ -163,19 +164,11 @@ const join = c => xs =>
 const spaces = t =>
   new Array(t).fill(' ').join('')
 
-const distanceFromMiddle = (d, i) =>
-  Math.abs(d - i)
-
-const spacesBetween = (d, m) =>
-  spaces(Math.max(0, 2 * d - 2 * m - 1))
-
 const makeLine = d => (s, i) => {
-  const dm = distanceFromMiddle(d, i)
+  const padding = spaces(d - i)
   return s === 'A'
-    ? spaces(d) + s + spaces(d)
-    : spaces(dm) +
-      s + spacesBetween(d, dm) + s +
-      spaces(dm)
+    ? padding + s + padding
+    : padding + s + spaces(i * 2 - 1) + s + padding
 }
 
 const diamond = l => {
@@ -183,7 +176,7 @@ const diamond = l => {
   const d = distance(s, l)
   return compose(
     join('\n'),
-    map(makeLine(d)),
-    xs => [...xs, ...compose(tail, reverse)(xs)]
+    xs => [...xs, ...compose(tail, reverse)(xs)],
+    map(makeLine(d))
   )(letters(s, l))
 }

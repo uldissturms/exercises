@@ -122,6 +122,11 @@ const skipWhile = fn =>
     )
   )
 
+const random = (min, max) =>
+  Math.floor(Math.random() * (max - min) + min)
+const randomOf = xs =>
+  xs[random(0, xs.length)]
+
 module.exports = {
   isUndefined,
   isNull,
@@ -148,5 +153,6 @@ module.exports = {
   reverse,
   map,
   filter,
-  skipWhile
+  skipWhile,
+  randomOf
 }
