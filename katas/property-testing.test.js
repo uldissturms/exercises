@@ -13,7 +13,11 @@ import {
   all,
   reverse,
   skipWhile,
-  randomOf
+  randomOf,
+  firstIndex,
+  lastIndex,
+  isLetter,
+  isNotLetter
 } from '../helpers'
 
 const letter = randomOf('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -111,27 +115,9 @@ const replace = (x, y) => s => s.replace(new RegExp(x, 'g'), y)
 const withoutLF = replace('\\n', '')
 const withoutSpaces = replace(' ', '')
 const trim = s => s.trim()
-const isLetter = c => /[A-Z]/.test(c)
-const isNotLetter = not(isLetter)
 const includes = c => s => s.includes(c)
 const isTwoIdenticalLetters = s =>
   s.length === 2 && s[0] === s[1]
-
-const firstIndex = f => s => {
-  for (let i = 0; i < s.length; i++) {
-    if (f(s[i])) {
-      return i
-    }
-  }
-}
-
-const lastIndex = f => s => {
-  for (let i = s.length - 1; i >= 0; i--) {
-    if (f(s[i])) {
-      return i
-    }
-  }
-}
 
 const leadingSpaces = s =>
   s.substring(0, firstIndex(isLetter)(s))

@@ -127,6 +127,26 @@ const random = (min, max) =>
 const randomOf = xs =>
   xs[random(0, xs.length)]
 
+const firstIndex = f => s => {
+  for (let i = 0; i < s.length; i++) {
+    if (f(s[i])) {
+      return i
+    }
+  }
+}
+
+const lastIndex = f => (s, ix = s.length - 1) => {
+  for (let i = ix; i >= 0; i--) {
+    if (f(s[i])) {
+      return i
+    }
+  }
+}
+
+const isLetter = c => /[A-Z]/.test(c)
+const isLowerLetter = c => /[a-z]/.test(c)
+const isNotLetter = not(isLetter)
+
 module.exports = {
   isUndefined,
   isNull,
@@ -154,5 +174,10 @@ module.exports = {
   map,
   filter,
   skipWhile,
-  randomOf
+  randomOf,
+  firstIndex,
+  lastIndex,
+  isLetter,
+  isNotLetter,
+  isLowerLetter
 }
