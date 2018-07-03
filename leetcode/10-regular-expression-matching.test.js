@@ -1,7 +1,6 @@
 // [https://leetcode.com/problems/regular-expression-matching]
 
 import test from 'ava'
-import {lastIndex} from '../helpers'
 
 test('match whole string', t => {
   t.true(match('aa', 'aa'))
@@ -20,7 +19,7 @@ test('wildcard match', t => {
 
 test('wildcard match unlimited times', t => {
   t.true(match('a*', 'aaa'))
-  // t.true(match('ab*a*c*a', 'aaa'))
+  t.true(match('ab*a*c*a', 'aaa'))
 })
 
 test('wildcard match zero times', t => {
@@ -49,53 +48,53 @@ test('character terminates wildcard for no-match', t => {
   t.false(match('.*bc', 'abb'))
 })
 
-const match = (p, s, ip = 0, is = 0, reason = 'start') => {
+const parse = (p, i = 0, r = []) => {
+  if (i >= p.length) {
+    return r
+  }
+
+  const char = p[i]
+
+  if (isWildcard(p[i + 1])) {
+    return parse(p, i + 2, [...r, {
+      fn: charMatch(char),
+      type: WILDCARD
+    }])
+  }
+
+  return parse(p, i + 1, [...r, {
+    fn: charMatch(char),
+    type: char
+  }])
+}
+
+const match = (p, s) =>
+  isMatch(parse(p), s)
+
+const isMatch = (p, s, ip = 0, is = 0, reason = 'start') => {
   if (is === s.length) {
     return ip === p.length ||
-      (ip === p.length - 1 && isWildcard(p[ip]))
+      (ip === p.length - 1 && isWildcard(p[ip].type))
   }
 
   if (ip >= p.length) {
     return false
   }
 
-  if (charMatch(p[ip], s[is])) {
-    return match(p, s, ip + 1, is + 1, 'char')
+  const c = s[is]
+  const {fn, type} = p[ip]
+  if (isWildcard(type)) {
+    return (fn(c) && isMatch(p, s, ip, is + 1, 'wild-match')) ||
+      isMatch(p, s, ip + 1, is, 'wild-skip')
   }
 
-  if (wildcardMatch(p, s, ip, is)) {
-    return match(p, s, ip, is + 1, 'wild-take') ||
-      match(p, s, ip + 1, is + 1, 'wild-take-move-on') ||
-      match(p, s, ip + 1, is - 1, 'wild-pass-1')
-  }
-
-  // ignore wildcard
-  if (isWildcard(p[ip])) {
-    return match(p, s, ip + 1, is, 'wild-fail-1')
-  }
-
-  if (isWildcard(p[ip + 1])) {
-    return match(p, s, ip + 2, is, 'wild-fail-2')
-  }
-
-  return false
+  return fn(c) && isMatch(p, s, ip + 1, is + 1, 'char-match')
 }
 
-const charMatch = (p, c) =>
+const charMatch = p => c =>
   p === ANY_CHAR || p === c
-
-const wildcardMatch = (p, s, ip, is) =>
-  p[ip] === WILDCARD &&
-    charMatch(
-      lastChar(p, Math.min(p.length - 1, ip)),
-      s[is]
-    )
 
 const ANY_CHAR = '.'
 const WILDCARD = '*'
 
 const isWildcard = c => c === WILDCARD
-
-const isLetterOrDot = c => /([a-z]|\.)/.test(c)
-const lastChar = (s, i) =>
-  s[lastIndex(isLetterOrDot)(s, i)]
