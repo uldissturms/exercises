@@ -143,10 +143,6 @@ const lastIndex = f => (s, ix = s.length - 1) => {
   }
 }
 
-const isLetter = c => /[A-Z]/.test(c)
-const isLowerLetter = c => /[a-z]/.test(c)
-const isNotLetter = not(isLetter)
-
 module.exports = {
   isUndefined,
   isNull,
@@ -176,8 +172,5 @@ module.exports = {
   skipWhile,
   randomOf,
   firstIndex,
-  lastIndex,
-  isLetter,
-  isNotLetter,
-  isLowerLetter
+  lastIndex
 }

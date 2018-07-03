@@ -15,9 +15,7 @@ import {
   skipWhile,
   randomOf,
   firstIndex,
-  lastIndex,
-  isLetter,
-  isNotLetter
+  lastIndex
 } from '../helpers'
 
 const letter = randomOf('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -118,6 +116,8 @@ const trim = s => s.trim()
 const includes = c => s => s.includes(c)
 const isTwoIdenticalLetters = s =>
   s.length === 2 && s[0] === s[1]
+const isLetter = c => /[A-Z]/.test(c)
+const isNotLetter = not(isLetter)
 
 const leadingSpaces = s =>
   s.substring(0, firstIndex(isLetter)(s))
