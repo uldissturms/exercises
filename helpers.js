@@ -143,6 +143,11 @@ const lastIndex = f => (s, ix = s.length - 1) => {
   }
 }
 
+const tap = fn => x => {
+  fn(x)
+  return x
+}
+
 module.exports = {
   isUndefined,
   isNull,
@@ -172,5 +177,6 @@ module.exports = {
   skipWhile,
   randomOf,
   firstIndex,
-  lastIndex
+  lastIndex,
+  tap
 }

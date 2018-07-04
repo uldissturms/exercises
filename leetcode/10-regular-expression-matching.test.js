@@ -1,6 +1,7 @@
 // [https://leetcode.com/problems/regular-expression-matching]
 
 import test from 'ava'
+import { compose, all, filter, map } from '../helpers'
 
 test('match whole string', t => {
   t.true(match('aa', 'aa'))
@@ -48,6 +49,12 @@ test('character terminates wildcard for no-match', t => {
   t.false(match('.*bc', 'abb'))
 })
 
+test('match empty string', t => {
+  t.true(match('', ''))
+  t.true(match('a*', ''))
+  t.true(match('a*a*', ''))
+})
+
 const parse = (p, i = 0, r = []) => {
   if (i >= p.length) {
     return r
@@ -73,8 +80,7 @@ const match = (p, s) =>
 
 const isMatch = (p, s, ip = 0, is = 0, reason = 'start') => {
   if (is === s.length) {
-    return ip === p.length ||
-      (ip === p.length - 1 && isWildcard(p[ip].type))
+    return ip === p.length || endsWithWildcard(ip)(p)
   }
 
   if (ip >= p.length) {
@@ -98,3 +104,10 @@ const ANY_CHAR = '.'
 const WILDCARD = '*'
 
 const isWildcard = c => c === WILDCARD
+const endsWith = fn => ix =>
+  compose(
+    all(fn),
+    map(({type}) => type),
+    filter((e, i) => i >= ix)
+  )
+const endsWithWildcard = endsWith(isWildcard)
