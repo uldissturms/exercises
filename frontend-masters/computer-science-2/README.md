@@ -8,8 +8,34 @@
 
 * https://codepen.io/collection/APoeqj/
 
+### other
+
+* [pathfinding visualizations](https://qiao.github.io/PathFinding.js/visual/)
 
 ### solved (codepen)
+
+* [bloom filter](https://codepen.io/uldissturms/pen/YJWwXG/?editors=0010#0)
+
+```js
+const h1 = string => Math.abs(XXH.h32(0xABCD).update(string).digest().toNumber() % 100);
+const h2 = string => Math.abs(XXH.h32(0x1234).update(string).digest().toNumber() % 100);
+const h3 = string => Math.abs(XXH.h32(0x6789).update(string).digest().toNumber() % 100);
+
+class BloomFilter {
+  mask = {}
+  add (string) {
+    this.mask[h1(string)] = true
+    this.mask[h2(string)] = true
+    this.mask[h3(string)] = true
+  }
+  contains (string) {
+    return (this.mask[h1(string)] &&
+            this.mask[h2(string)] &&
+            this.mask[h3(string)]
+      ) === true
+  }
+};
+```
 
 * [maze generation](https://codepen.io/uldissturms/pen/zmvaqW?editors=0010)
 
@@ -86,3 +112,8 @@ const generateMaze = (maze, [xStart, yStart]) => {
   return maze;
 };
 ```
+
+# to go
+
+* [heap sort](https://codepen.io/btholt/pen/PQmKPa?editors=0010)
+* [radix sort](https://codepen.io/btholt/pen/eVWyPd?editors=0010)
