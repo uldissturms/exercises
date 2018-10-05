@@ -113,7 +113,48 @@ const generateMaze = (maze, [xStart, yStart]) => {
 };
 ```
 
+* [radix sort](https://codepen.io/uldissturms/pen/EdyKVZ?editors=0010)
+
+```js
+const addItem = (q, index, item) => {
+  if (q[index] === undefined) {
+    q[index] = [item]
+  } else {
+    q[index].push(item)
+  }
+  return q
+}
+
+const flatten = (x) =>
+  x.reduce((acc, cur) => acc.concat(cur))
+
+const nthNumber = (index, item) => {
+  const chars = (item).toString()
+  const char = chars[chars.length - index - 1] || '0'
+  return parseInt(char, 10)
+}
+
+function radixSort(array) {
+  snapshot(array);
+
+  let index = 0
+  while (true) {
+    const q = []
+    for (const item of array) {
+      addItem(q, nthNumber(index, item), item)
+    }
+
+    if (q.length === 1) {
+      return array
+    }
+
+    array = flatten(q)
+    snapshot(array)
+    index++
+  }
+}
+```
+
 # to go
 
 * [heap sort](https://codepen.io/btholt/pen/PQmKPa?editors=0010)
-* [radix sort](https://codepen.io/btholt/pen/eVWyPd?editors=0010)
