@@ -1,8 +1,8 @@
 import test from 'ava'
 
 test('heapifies array', t => {
-  t.deepEqual(heapify([2, 4, 1], 0), [4, 2, 1])
-  t.deepEqual(heapify([1, 2], 0), [2, 1])
+  t.deepEqual(heapify([2, 4, 1]), [4, 2, 1])
+  t.deepEqual(heapify([1, 2]), [2, 1])
 })
 
 test('build max heap', t => {
@@ -30,23 +30,19 @@ const leftChild = i =>
   i * 2 + 1
 const rightChild = i =>
   i * 2 + 2
-const maxChild = (a, i) => {
+const maxChild = (a, i, s) => {
   const li = leftChild(i)
   const ri = rightChild(i)
 
-  if (li >= a.length) {
+  if (li >= s) {
     return []
   }
 
-  if (ri >= a.length) {
+  if (ri >= s) {
     return [li, a[li]]
   }
 
-  if (a[li] > a[ri]) {
-    return [li, a[li]]
-  }
-
-  return [ri, a[ri]]
+  return a[li] > a[ri] ? [li, a[li]] : [ri, a[ri]]
 }
 const swap = (a, l, r) => {
   const t = a[l]
@@ -54,12 +50,15 @@ const swap = (a, l, r) => {
   a[r] = t
 }
 
+const isNotUndefined = x =>
+  typeof x !== 'undefined'
+
 // O(log n)
-const heapify = (a, i) => {
-  const [ci, cv] = maxChild(a, i)
-  if (cv > a[i]) {
+const heapify = (a, i = 0, s = a.length) => {
+  const [ci, cv] = maxChild(a, i, s)
+  if (isNotUndefined(ci) && cv > a[i]) {
     swap(a, i, ci)
-    heapify(a, ci)
+    heapify(a, ci, s)
   }
   return a
 }
@@ -67,23 +66,22 @@ const heapify = (a, i) => {
 // O(n)
 const buildHeap = a => {
   for (let i = Math.floor(a.length / 2); i >= 0; i--) {
-    heapify(a, i)
+    heapify(a, i, a.length)
   }
   return a
 }
 
 // O(n log n)
 const heapSort = a => {
-  const o = []
+  let heapSize = a.length
 
-  buildHeap(a)
+  a = buildHeap(a)
 
-  for (let i = a.length - 1; i >= 0; i--) {
-    o.unshift(a[0])
+  for (let i = heapSize - 1; i >= 0; i--) {
+    heapSize--
     swap(a, 0, i)
-    a.pop()
-    heapify(a, 0)
+    heapify(a, 0, heapSize)
   }
 
-  return o
+  return a
 }
