@@ -155,6 +155,68 @@ function radixSort(array) {
 }
 ```
 
-# to go
+* [heap sort](https://codepen.io/uldissturms/pen/EdNerB?editors=0010)
 
-* [heap sort](https://codepen.io/btholt/pen/PQmKPa?editors=0010)
+```js
+const leftChild = i =>
+  i * 2 + 1
+const rightChild = i =>
+  i * 2 + 2
+const maxChild = (a, i, s) => {
+  const li = leftChild(i)
+  const ri = rightChild(i)
+
+  if (li >= s) {
+    return []
+  }
+
+  if (ri >= s) {
+    return [li, a[li]]
+  }
+
+  return a[li] > a[ri] ? [li, a[li]] : [ri, a[ri]]
+}
+const swap = (a, l, r) => {
+  const t = a[l]
+  a[l] = a[r]
+  a[r] = t
+}
+
+const isNotUndefined = x =>
+  typeof x !== 'undefined'
+
+// O(log n)
+const heapify = (a, i = 0, s = a.length) => {
+  const [ci, cv] = maxChild(a, i, s)
+  if (isNotUndefined(ci) && cv > a[i]) {
+    swap(a, i, ci)
+    heapify(a, ci, s)
+  }
+  return a
+}
+
+// O(n)
+const buildHeap = a => {
+  for (let i = Math.floor(a.length / 2); i >= 0; i--) {
+    heapify(a, i, a.length)
+  }
+  return a
+}
+
+// O(n log n)
+const heapSort = a => {
+  let heapSize = a.length
+
+  a = buildHeap(a)
+  snapshot(a)
+
+  for (let i = heapSize - 1; i >= 0; i--) {
+    heapSize--
+    swap(a, 0, i)
+    heapify(a, 0, heapSize)
+    snapshot(a)
+  }
+
+  return a
+}
+```
