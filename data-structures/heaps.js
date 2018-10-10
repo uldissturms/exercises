@@ -10,8 +10,8 @@ const rightChildFor = i =>
   (2 * i) + 2
 const parentFor = i =>
   isLeftChild(i)
-  ? (i - 1) / 2
-  : (i - 2) / 2
+    ? (i - 1) / 2
+    : (i - 2) / 2
 
 class Heap {
   constructor (cmp) {
