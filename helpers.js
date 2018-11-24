@@ -148,6 +148,9 @@ const tap = fn => x => {
   return x
 }
 
+const clone = o =>
+  JSON.parse(JSON.stringify(o))
+
 module.exports = {
   isUndefined,
   isNull,
@@ -178,5 +181,6 @@ module.exports = {
   randomOf,
   firstIndex,
   lastIndex,
-  tap
+  tap,
+  clone
 }
