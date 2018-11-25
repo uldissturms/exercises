@@ -15,7 +15,9 @@ import {
   skipWhile,
   randomOf,
   firstIndex,
-  lastIndex
+  lastIndex,
+  split,
+  join
 } from '../helpers'
 
 const letter = randomOf('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -107,7 +109,6 @@ test('figure is symmetric around horizontal axis', t => {
   )
 })
 
-const split = c => s => s.split(c)
 const splitLF = split('\n')
 const replace = (x, y) => s => s.replace(new RegExp(x, 'g'), y)
 const withoutLF = replace('\\n', '')
@@ -143,9 +144,6 @@ const ints = (s, e, l = []) =>
 
 const distance = (s, e) =>
   toCharCode(e) - toCharCode(s)
-
-const join = c => xs =>
-  xs.join(c)
 
 const spaces = t =>
   new Array(t).fill(' ').join('')

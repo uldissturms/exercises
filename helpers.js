@@ -151,6 +151,12 @@ const tap = fn => x => {
 const clone = o =>
   JSON.parse(JSON.stringify(o))
 
+const split = c => s => s.split(c)
+const join = c => xs => xs.join(c)
+
+const toWords = split(' ')
+const fromWords = join(' ')
+
 module.exports = {
   isUndefined,
   isNull,
@@ -182,5 +188,9 @@ module.exports = {
   firstIndex,
   lastIndex,
   tap,
-  clone
+  clone,
+  split,
+  join,
+  toWords,
+  fromWords
 }
