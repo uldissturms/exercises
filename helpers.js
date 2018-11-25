@@ -104,6 +104,15 @@ const reverse = l => {
   return [...reverse(xs), x]
 }
 
+const reverseInplace = (s, e, l) => {
+  for (let i = 0; i < (e - s) / 2; i++) {
+    const tmp = l[s + i]
+    l[s + i] = l[e - i]
+    l[e - i] = tmp
+  }
+  return l
+}
+
 const map = fn => xs =>
   xs.map(fn)
 
@@ -181,6 +190,7 @@ module.exports = {
   compose,
   all,
   reverse,
+  reverseInplace,
   map,
   filter,
   skipWhile,
