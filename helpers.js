@@ -17,6 +17,8 @@ const isNotUndefined = not(isUndefined)
 const isNotNull = not(isNull)
 const isNotEmpty = not(isEmpty)
 
+const has = (p, o) => isNotUndefined(prop(p, o))
+
 const head = ([x]) =>
   x
 
@@ -181,6 +183,7 @@ module.exports = {
   prop,
   path,
   set,
+  has,
   traverseTree,
   isEmpty,
   flatten,
