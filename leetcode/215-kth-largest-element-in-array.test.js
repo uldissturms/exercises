@@ -1,7 +1,7 @@
 // [https://leetcode.com/problems/kth-largest-element-in-an-array]
 
 const test = require('ava')
-const {has, isUndefined} = require('../helpers')
+const {MinHeap} = require('../data-structures/heaps')
 
 test('returns largest from array containing distinct values', t => {
   t.deepEqual(kthLargest([3, 2, 1, 5, 6, 4], 2), 5)
@@ -32,21 +32,19 @@ const kthLargest = (arr, k) => {
     return undefined
   }
 
-  let max
-  let maxIdx
-  const except = {}
+  const heap = new MinHeap()
 
-  for (let i = 0; i < k; i++) {
-    max = undefined
-    maxIdx = undefined
-    for (const idx in arr) {
-      if ((isUndefined(max) || arr[idx] > max) && !has(idx, except)) {
-        max = arr[idx]
-        maxIdx = idx
+  for (const value of arr) {
+    if (heap.size < k) {
+      heap.insert(value)
+    } else {
+      const min = heap.peek()
+      if (value > min) {
+        heap.pop()
+        heap.insert(value)
       }
     }
-    except[maxIdx] = true
   }
 
-  return max
+  return heap.peek()
 }
