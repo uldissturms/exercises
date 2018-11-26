@@ -12,29 +12,41 @@ test('returns largest from array containing duplicate values', t => {
 })
 
 test('empty array returns undefined as max', t => {
-  t.deepEqual(kthLargest([], 2), undefined)
+  t.deepEqual(kthLargest([], 1), undefined)
+})
+
+test('returns undefined if lenght of array < k', t => {
+  t.deepEqual(kthLargest([1], 2), undefined)
+})
+
+test('returns undefined if k is zero or negative', t => {
+  t.deepEqual(kthLargest([1], 0), undefined)
+  t.deepEqual(kthLargest([1], -1), undefined)
 })
 
 const kthLargest = (arr, k) => {
-  if (arr.length === 0) {
+  if (k <= 0) {
+    return undefined
+  }
+  if (arr.length === 0 || arr.length < k) {
     return undefined
   }
 
-  return getMaxExcept(arr, k, {})
-}
-
-const getMaxExcept = (arr, k, except = {}) => {
   let max
   let maxIdx
+  const except = {}
 
-  for (const idx in arr) {
-    if ((isUndefined(max) || arr[idx] > max) && !has(idx, except)) {
-      max = arr[idx]
-      maxIdx = idx
+  for (let i = 0; i < k; i++) {
+    max = undefined
+    maxIdx = undefined
+    for (const idx in arr) {
+      if ((isUndefined(max) || arr[idx] > max) && !has(idx, except)) {
+        max = arr[idx]
+        maxIdx = idx
+      }
     }
+    except[maxIdx] = true
   }
 
-  return k === 1
-    ? max
-    : getMaxExcept(arr, k - 1, Object.assign({[maxIdx]: true}, except))
+  return max
 }
