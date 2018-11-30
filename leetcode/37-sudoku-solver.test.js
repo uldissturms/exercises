@@ -1,7 +1,6 @@
 // [https://leetcode.com/problems/sudoku-solver]
 
 const test = require('ava')
-const {isUndefined} = require('../helpers')
 
 const createInput = () => [
   ['5', '3', '.', '.', '7', '.', '.', '.', '.'],
@@ -46,23 +45,60 @@ test('solves a sudoku', t => {
   t.true(solved)
 })
 
+test('segment for position', t => {
+  t.deepEqual(segmentForPos(0), {row: 0, col: 0})
+  t.deepEqual(segmentForPos(8), {row: 0, col: 0})
+  t.deepEqual(segmentForPos(9), {row: 0, col: 1})
+  t.deepEqual(segmentForPos(17), {row: 0, col: 1})
+  t.deepEqual(segmentForPos(18), {row: 0, col: 2})
+  t.deepEqual(segmentForPos(26), {row: 0, col: 2})
+  t.deepEqual(segmentForPos(27), {row: 1, col: 0})
+  t.deepEqual(segmentForPos(35), {row: 1, col: 0})
+  t.deepEqual(segmentForPos(36), {row: 1, col: 1})
+})
+
+test('position in matrix', t => {
+  t.deepEqual(posInMatix(0), {row: 0, col: 0})
+  t.deepEqual(posInMatix(1), {row: 0, col: 1})
+  t.deepEqual(posInMatix(2), {row: 0, col: 2})
+  t.deepEqual(posInMatix(3), {row: 1, col: 0})
+  t.deepEqual(posInMatix(8), {row: 2, col: 2})
+})
+
+test('position to absolute index', t => {
+  t.deepEqual(posForIdx(0), {row: 0, col: 0})
+  t.deepEqual(posForIdx(1), {row: 0, col: 1})
+  t.deepEqual(posForIdx(2), {row: 0, col: 2})
+  t.deepEqual(posForIdx(3), {row: 1, col: 0})
+  t.deepEqual(posForIdx(9), {row: 0, col: 3})
+  t.deepEqual(posForIdx(18), {row: 0, col: 6})
+  t.deepEqual(posForIdx(26), {row: 2, col: 8})
+  t.deepEqual(posForIdx(27), {row: 3, col: 0})
+})
+
 const EMPTY = '.'
 const ALL_CHARS_ARR = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+const ALL_CHARS_SIZE = ALL_CHARS_ARR.length
 const ALL_CHARS = new Set(ALL_CHARS_ARR)
-const SEGMENT_SIZE = Math.sqrt(ALL_CHARS_ARR.length)
+const SEGMENT_SIZE = Math.sqrt(ALL_CHARS_SIZE)
+const BOARD_SIZE = ALL_CHARS_SIZE ** 2
 
-const solveSudoku = arr => solve(0, 0, arr)
+const solveSudoku = arr => solve(0, arr)
 
-const solve = (row, col, arr) => {
-  const next = getNext(row, col, arr)
+const solve = (idx, arr) => {
+  if (idx === BOARD_SIZE) {
+    return true
+  }
+
+  const {row, col} = posForIdx(idx)
 
   if (arr[row][col] !== EMPTY) {
-    return isUndefined(next) || solve(next.row, next.col, arr)
+    return solve(idx + 1, arr)
   }
 
   for (const char of getValidChars(row, col, arr)) {
     arr[row][col] = char
-    const valid = isUndefined(next) || solve(next.row, next.col, arr)
+    const valid = solve(idx + 1, arr)
     if (valid) {
       return true
     }
@@ -70,18 +106,6 @@ const solve = (row, col, arr) => {
   }
 
   return false
-}
-
-const getNext = (row, col, arr) => {
-  if (col < arr[col].length - 1) {
-    return {row, col: col + 1}
-  }
-
-  if (row < arr.length - 1) {
-    return {row: row + 1, col: 0}
-  }
-
-  return undefined
 }
 
 const getValidChars = (row, col, arr) => {
@@ -102,6 +126,33 @@ const segmentFor = i =>
 
 const offsetForSegment = i =>
   segmentFor(i) * SEGMENT_SIZE
+
+const add = (a, b) => ({
+  row: a.row + b.row,
+  col: a.col + b.col
+})
+
+const scale = ({row, col}, x) => ({
+  row: row * x,
+  col: col * x
+})
+
+const posForIdx = i =>
+  add(
+    scale(
+      segmentForPos(i),
+      SEGMENT_SIZE
+    ),
+    posInMatix(i % ALL_CHARS_SIZE)
+  )
+
+const segmentForPos = i =>
+  posInMatix(Math.floor(i / ALL_CHARS_SIZE))
+
+const posInMatix = i => ({
+  row: segmentFor(i),
+  col: i % SEGMENT_SIZE
+})
 
 const charsInSegmentFor = (row, col, arr) => {
   const rowOffset = offsetForSegment(row)
