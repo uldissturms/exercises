@@ -50,4 +50,4 @@ const merge = xs => {
 }
 
 const overlaps = (x, y) =>
-  x.start <= y.start && x.end >= y.start
+  x.start <= y.end && y.start <= x.end
