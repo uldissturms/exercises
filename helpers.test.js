@@ -4,7 +4,8 @@ import {
   flattenBy,
   isArray,
   reverse,
-  reverseInplace
+  reverseInplace,
+  sortBy
 } from './helpers'
 
 test('flattens to single level', t => {
@@ -34,4 +35,8 @@ test('reverse inplace with offset', t => {
   t.deepEqual(
     reverseInplace(1, 3, ['a', 'b', 'c', 'd']), ['a', 'd', 'c', 'b']
   )
+})
+
+test('sort - sorts in place', t => {
+  t.deepEqual(sortBy(x => x)([1, 3, 2, 5, 4]), [1, 2, 3, 4, 5])
 })

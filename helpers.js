@@ -168,6 +168,11 @@ const join = c => xs => xs.join(c)
 const toWords = split(' ')
 const fromWords = join(' ')
 
+// TODO: implement functional sort that doesn't modify input
+// in place sort by fn applied to x and y
+const sortBy = fn => xs =>
+  xs.sort((x, y) => fn(x) - fn(y))
+
 module.exports = {
   isUndefined,
   isNull,
@@ -205,5 +210,6 @@ module.exports = {
   split,
   join,
   toWords,
-  fromWords
+  fromWords,
+  sortBy
 }
