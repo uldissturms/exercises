@@ -37,12 +37,12 @@ const sortByStart = sortBy(x => prop('start', x))
 
 const merge = xs => {
   const res = []
-  for (const x of sortByStart(clone(xs))) {
+  for (const x of sortByStart(xs)) {
     const last = res[res.length - 1]
     if (isNotUndefined(last) && overlaps(last, x)) {
       last.end = Math.max(last.end, x.end)
     } else {
-      res.push(x)
+      res.push(clone(x))
     }
   }
 
