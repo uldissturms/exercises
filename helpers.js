@@ -1,3 +1,5 @@
+const id = x => x
+
 const isUndefined = obj =>
   typeof obj === 'undefined'
 
@@ -174,6 +176,7 @@ const sortBy = fn => xs =>
   xs.sort((x, y) => fn(x) - fn(y))
 
 module.exports = {
+  id,
   isUndefined,
   isNull,
   isNotUndefined,
