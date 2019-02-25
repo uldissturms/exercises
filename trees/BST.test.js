@@ -4,7 +4,8 @@ import {
   insert,
   insertAndTrackHeight,
   leftRotate,
-  rightRotate
+  rightRotate,
+  fixParent
 } from './BST'
 
 const bst = {
@@ -87,6 +88,33 @@ test('left rotate', t => {
   t.is(nodeY.right, nodeC)
 })
 
+test('left rotate with parent', t => {
+  const nodeY = {
+    data: 'Y',
+    left: nodeB,
+    right: nodeC
+  }
+  const nodeX = {
+    data: 'X',
+    left: nodeA,
+    right: nodeY
+  }
+  const root = {
+    data: 'R',
+    left: nodeX
+  }
+  nodeX.parent = root
+
+  leftRotate(nodeX)
+
+  t.is(nodeX.left, nodeA)
+  t.is(nodeX.right, nodeB)
+  t.is(nodeX.parent, nodeY)
+  t.is(nodeY.left, nodeX)
+  t.is(nodeY.right, nodeC)
+  t.is(root.left, nodeY)
+})
+
 test('right rotate', t => {
   const nodeX = {
     data: 'X',
@@ -105,6 +133,68 @@ test('right rotate', t => {
   t.is(nodeY.right, nodeC)
   t.is(nodeX.left, nodeA)
   t.is(nodeX.right, nodeY)
+})
+
+test('right rotate with parent', t => {
+  const nodeX = {
+    data: 'X',
+    left: nodeA,
+    right: nodeB
+  }
+  const nodeY = {
+    data: 'Y',
+    left: nodeX,
+    right: nodeC
+  }
+  const root = {
+    data: 'R',
+    left: nodeY
+  }
+  nodeY.parent = root
+
+  rightRotate(nodeY)
+
+  t.is(nodeY.left, nodeB)
+  t.is(nodeY.right, nodeC)
+  t.is(nodeY.parent, nodeX)
+  t.is(nodeX.left, nodeA)
+  t.is(nodeX.right, nodeY)
+  t.is(nodeX.parent, root)
+})
+
+test('fix parent - no parent', t => {
+  const a = { data: 'A' }
+  const b = { data: 'B' }
+
+  fixParent(a, b)
+
+  t.is(a.parent, b)
+})
+
+test('fix parent - left parent', t => {
+  const a = { data: 'A' }
+  const b = { data: 'B' }
+  const r = { data: 'R', left: a }
+  a.parent = r
+
+  fixParent(a, b)
+
+  t.is(a.parent, b)
+  t.is(b.parent, r)
+  t.is(r.left, b)
+})
+
+test('fix parent - right parent', t => {
+  const a = { data: 'A' }
+  const b = { data: 'B' }
+  const r = { data: 'R', right: a }
+  a.parent = r
+
+  fixParent(a, b)
+
+  t.is(a.parent, b)
+  t.is(b.parent, r)
+  t.is(r.right, b)
 })
 
 test('calculate height of a node', t => {

@@ -11,20 +11,22 @@ const height = (node) => {
   return Math.max(left.height, right.height) + 1
 }
 
-const insert = (fn = id) => (node, to) => {
-  if (isUndefined(to)) {
-    return fn(node)
+const insert = (fn = id) => (n, p) => {
+  if (isUndefined(p)) {
+    return fn(n)
   }
 
-  if (node.data <= to.data) {
-    const left = insert(fn)(node, to.left)
-    to.left = left
+  if (n.data <= p.data) {
+    const left = insert(fn)(n, p.left)
+    left.parent = p
+    p.left = left
   } else {
-    const right = insert(fn)(node, to.right)
-    to.right = right
+    const right = insert(fn)(n, p.right)
+    right.parent = p
+    p.right = right
   }
 
-  return fn(to)
+  return fn(p)
 }
 
 const trackHeight = (x) => {
@@ -34,16 +36,40 @@ const trackHeight = (x) => {
 
 const insertAndTrackHeight = insert(trackHeight)
 
-const leftRotate = (node) => {
-  const { right } = node
-  node.right = right.left
-  right.left = node
+const fixParent = (n, p) => {
+  const { parent } = n
+  n.parent = p
+  p.parent = parent
+
+  if (isUndefined(parent)) {
+    return n
+  }
+
+  if (parent.left === n) {
+    parent.left = p
+    return n
+  }
+
+  if (parent.right === n) {
+    parent.right = p
+    return n
+  }
+
+  return n
 }
 
-const rightRotate = (node) => {
-  const { left } = node
-  node.left = left.right
-  left.right = node
+const leftRotate = (n) => {
+  const { right: r } = n
+  n.right = r.left
+  r.left = n
+  return fixParent(n, r)
+}
+
+const rightRotate = (n) => {
+  const { left: l } = n
+  n.left = l.right
+  l.right = n
+  return fixParent(n, l)
 }
 
 module.exports = {
@@ -52,5 +78,7 @@ module.exports = {
   insert,
   insertAndTrackHeight,
   leftRotate,
-  rightRotate
+  rightRotate,
+  fixParent,
+  DEFAULT_HEIGHT_NODE
 }
