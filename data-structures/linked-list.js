@@ -3,7 +3,9 @@ const { isUndefined, isNotUndefined } = require('../helpers')
 const linkedList = () => {
   let head = undefined
   let tail = undefined
+  let size = 0
   return {
+    size: () => size,
     head: () => head,
     tail: () => tail,
     append: (x) => {
@@ -13,6 +15,7 @@ const linkedList = () => {
       } else {
         head = node
       }
+      size++
     }
   }
 }

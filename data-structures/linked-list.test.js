@@ -62,3 +62,12 @@ test('next - returns previous item - two items', t => {
   ll.append(2)
   t.is(ll.tail().prev().data, 2);
 })
+
+test('size - returns number of items', t => {
+  const ll = linkedList()
+  t.is(ll.size(), 0)
+  ll.append(1)
+  t.is(ll.size(), 1)
+  ll.append(2)
+  t.is(ll.size(), 2)
+})
