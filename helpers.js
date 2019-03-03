@@ -175,6 +175,8 @@ const fromWords = join(' ')
 const sortBy = fn => xs =>
   xs.sort((x, y) => fn(x) - fn(y))
 
+const eq = (x, y) => x === y
+
 module.exports = {
   id,
   isUndefined,
@@ -214,5 +216,6 @@ module.exports = {
   join,
   toWords,
   fromWords,
-  sortBy
+  sortBy,
+  eq
 }
