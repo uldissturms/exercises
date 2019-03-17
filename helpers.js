@@ -177,6 +177,13 @@ const sortBy = fn => xs =>
 
 const eq = (x, y) => x === y
 
+const trampoline = f => {
+  while (f && f instanceof Function) {
+    f = f()
+  }
+  return f
+}
+
 module.exports = {
   id,
   isUndefined,
@@ -217,5 +224,6 @@ module.exports = {
   toWords,
   fromWords,
   sortBy,
-  eq
+  eq,
+  trampoline
 }
