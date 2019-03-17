@@ -2,7 +2,7 @@
 
 import test from 'ava'
 import { big } from './174-dungeon-game.data'
-import { isNotUndefined } from '../helpers'
+import { isUndefined, isNotUndefined, clone, defaultTo } from '../helpers'
 
 test('dungeon game - solve', t => {
   const input = [
@@ -36,9 +36,39 @@ const solve = (a) => {
     return MIN_HEALTH
   }
 
-  return solveR(a, [0, 0], {})
+  return solveI(a)
+  // return solveR(a, [0, 0], {})
 }
 
+const prevBest = (map, row, col) => {
+  const right = map[row][col + 1]
+  const down = (map[row + 1] || [])[col]
+
+  if (isUndefined(right) && isUndefined(down)) {
+    return MIN_HEALTH
+  }
+
+  return Math.min(
+    defaultTo(Infinity, right),
+    defaultTo(Infinity, down)
+  )
+}
+
+// Iterative solution
+const solveI = (a) => {
+  const rows = a.length
+  const columns = a[0].length
+  const map = clone(a)
+  for (let col = columns - 1; col >= 0; col--) {
+    for (let row = rows - 1; row >= 0; row--) {
+      map[row][col] = Math.max(MIN_HEALTH, prevBest(map, row, col) - map[row][col])
+    }
+  }
+
+  return map[0][0]
+}
+
+// Recursive solution
 const solveR = (a, [y, x], map) => {
   const [eY, eX] = [a.length - 1, a[0].length - 1]
 

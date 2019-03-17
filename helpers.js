@@ -184,6 +184,9 @@ const trampoline = f => {
   return f
 }
 
+const defaultTo = (x, y) =>
+  isUndefined(y) ? x : y
+
 module.exports = {
   id,
   isUndefined,
@@ -225,5 +228,6 @@ module.exports = {
   fromWords,
   sortBy,
   eq,
-  trampoline
+  trampoline,
+  defaultTo
 }
