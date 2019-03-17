@@ -29,6 +29,15 @@ test('dungeon game - big data set', t => {
   t.is(solve(big), 85)
 })
 
+test('dungeon game - leetcode best solution', t => {
+  const input = [
+    [ -2, -3, 3 ],
+    [ -5, -10, 1 ],
+    [ 10, 30, -5 ]
+  ]
+  t.is(calculateMinimumHP(input), 7)
+})
+
 const MIN_HEALTH = 1
 
 const solve = (a) => {
@@ -108,4 +117,19 @@ const keyFor = (y, x) =>
 const cacheAndReturn = (key, value, map) => {
   map[key] = value
   return value
+}
+
+// leetcode best solution
+const calculateMinimumHP = function (dungeon) {
+  let row = dungeon.length
+  let col = dungeon[0].length
+  let dp = new Array(col).fill(Infinity)
+  dp[col - 1] = 1
+  for (let i = row - 1; i >= 0; --i) {
+    dp[col - 1] = Math.max(1, dp[col - 1] - dungeon[i][col - 1])
+    for (let j = col - 2; j >= 0; --j) {
+      dp[j] = Math.max(1, Math.min(dp[j], dp[j + 1]) - dungeon[i][j])
+    }
+  }
+  return dp[0]
 }
