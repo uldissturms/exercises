@@ -2,7 +2,7 @@
 
 import test from 'ava'
 import { big } from './174-dungeon-game.data'
-import { isUndefined, isNotUndefined, clone, defaultTo } from '../helpers'
+import { isNotUndefined } from '../helpers'
 
 test('dungeon game - solve', t => {
   const input = [
@@ -51,26 +51,26 @@ const solve = (a) => {
 
 const prevBest = (map, row, col) => {
   const right = map[row][col + 1]
-  const down = (map[row + 1] || [])[col]
-
-  if (isUndefined(right) && isUndefined(down)) {
-    return MIN_HEALTH
-  }
+  const down = map[row + 1][col]
 
   return Math.min(
-    defaultTo(Infinity, right),
-    defaultTo(Infinity, down)
+    right,
+    down
   )
 }
 
 // Iterative solution
-const solveI = (a) => {
-  const rows = a.length
-  const columns = a[0].length
-  const map = clone(a)
+const solveI = (arr) => {
+  const rows = arr.length
+  const columns = arr[0].length
+  const map = new Array(rows + 1).fill(0).map(
+    (x) => new Array(columns + 1).fill(Infinity)
+  )
+  map[rows - 1][columns] = MIN_HEALTH
+  map[rows][columns - 1] = MIN_HEALTH
   for (let col = columns - 1; col >= 0; col--) {
     for (let row = rows - 1; row >= 0; row--) {
-      map[row][col] = Math.max(MIN_HEALTH, prevBest(map, row, col) - map[row][col])
+      map[row][col] = Math.max(MIN_HEALTH, prevBest(map, row, col) - arr[row][col])
     }
   }
 
