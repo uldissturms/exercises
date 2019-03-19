@@ -34,3 +34,6 @@ More information about hashign on [wikipedia](https://en.wikipedia.org/wiki/Hash
   * [BST (binary search tree)](https://en.wikipedia.org/wiki/Binary_search_tree)
   * [AVL (Adelson-Velsky and Landis tree)](https://en.wikipedia.org/wiki/AVL_tree)
   * traversals
+
+### Interview questions
+  * ./interview-io/word-break.test.js
