@@ -37,3 +37,4 @@ More information about hashign on [wikipedia](https://en.wikipedia.org/wiki/Hash
 
 ### Interview questions
   * ./interview-io/word-break.test.js
+  * ./interview-io/shortest-continuous-subarray.test.js
