@@ -38,3 +38,10 @@ More information about hashign on [wikipedia](https://en.wikipedia.org/wiki/Hash
 ### Interview questions
   * ./interview-io/word-break.test.js
   * ./interview-io/shortest-continuous-subarray.test.js
+
+### Sources
+  * https://leetcode.com
+  * http://www.crackingthecodinginterview.com
+  * https://projecteuler.net
+  * https://www.codeabbey.com
+  * https://adriann.github.io/programming_problems.html
