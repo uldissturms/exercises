@@ -39,6 +39,9 @@ More information about hashign on [wikipedia](https://en.wikipedia.org/wiki/Hash
   * ./interview-io/word-break.test.js
   * ./interview-io/shortest-continuous-subarray.test.js
 
+### Games
+  * ./games/tower-of-hanoi.test.js
+
 ### Sources
   * https://leetcode.com
   * http://www.crackingthecodinginterview.com
