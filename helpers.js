@@ -187,6 +187,19 @@ const trampoline = f => {
 const defaultTo = (x, y) =>
   isUndefined(y) ? x : y
 
+const memoizeWith = (keyFor, fn) => {
+  const memo = {}
+  return (...args) => {
+    const key = keyFor(...args)
+    if (isNotUndefined(memo[key])) {
+      return memo[key]
+    }
+    const res = fn(...args)
+    memo[key] = res
+    return res
+  }
+}
+
 module.exports = {
   id,
   isUndefined,
@@ -229,5 +242,6 @@ module.exports = {
   sortBy,
   eq,
   trampoline,
-  defaultTo
+  defaultTo,
+  memoizeWith
 }
