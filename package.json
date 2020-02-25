@@ -8,10 +8,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "ava",
-    "test:dev": "npm run test -- -w",
+    "test": "jest",
     "lint": "standard",
-    "lint:pretty": "npm run lint | snazzy",
     "bench": "node bench"
   },
   "devDependencies": {
@@ -25,12 +23,14 @@
     "convnet": "^1.0.0",
     "glob": "^7.1.2",
     "ramda": "^0.26.1",
-    "snazzy": "^7.0.0",
     "standard": "^10.0.3"
   },
   "standard": {
     "ignore": [
       "*.data.*"
     ]
+  },
+  "jest": {
+    "testMatch": ["**/**/*.jest.js"]
   }
 }

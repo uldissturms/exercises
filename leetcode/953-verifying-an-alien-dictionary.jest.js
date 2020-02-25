@@ -8,10 +8,6 @@ test('fromEntries', () => {
   expect(fromEntries([['a', 1], ['b', 2], ['c', 3]])).toEqual({a: 1, b: 2, c: 3})
 })
 
-test('longest word', () => {
-  expect(longest(['1', '22', '333'])).toBe(3)
-})
-
 test('solve - in order', () => {
   const words = ['hello', 'leetcode']
   const order = 'hlabcdefgijkmnopqrstuvwxyz'
