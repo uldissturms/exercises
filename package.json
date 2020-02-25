@@ -15,7 +15,8 @@
     "bench": "node bench"
   },
   "devDependencies": {
-    "ava": "^0.25.0"
+    "ava": "^0.25.0",
+    "jest": "^25.1.0"
   },
   "dependencies": {
     "benchmark": "^2.1.4",
