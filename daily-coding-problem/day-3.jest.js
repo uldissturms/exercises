@@ -48,32 +48,27 @@ steps:
       if value == 'null' trackback
 */
 
-function TreeNode(val, left, right) {
-    this.val = val;
-    this.left = this.right = null;
-}
-
 const node4 = {
-  val: '4',
+  val: '4'
 }
 
 const node3 = {
-  val: '3',
+  val: '3'
 }
 
 const node2 = {
   val: '2',
   left: node3,
-  right: node4,
+  right: node4
 }
 
 const node5 = {
-  val: '5',
+  val: '5'
 }
 const node1 = {
   val: '1',
   left: node2,
-  right: node5,
+  right: node5
 }
 
 const node1String = '1, 2, 3, null, null, 4, null, null, 5, null, null'
@@ -99,18 +94,19 @@ const NULL = 'null'
 
 const isNil = x => x == null
 
-const serialize = (n) => buildArray(n).join(DELIMITER)
+const serialize = n => buildArray(n).join(DELIMITER)
 
 const buildArray = (n, a = []) => {
   if (isNil(n)) {
     return [...a, NULL]
   }
 
-  const a1 = buildArray(n.left, [...a, n.val])
-  return buildArray(n.right, a1)
+  const aWithNode = [...a, n.val]
+  const aWithLeft = buildArray(n.left, aWithNode)
+  return buildArray(n.right, aWithLeft)
 }
 
-const deserialize = (s) => {
+const deserialize = s => {
   const [n] = toTree(s.split(DELIMITER))
   return n
 }
@@ -122,7 +118,7 @@ const toTree = (a, p, idx = 0) => {
     return [undefined, idx]
   }
 
-  const n = new TreeNode(val)
+  const n = { val }
 
   const [l, lIdx] = toTree(a, n, idx + 1)
   const [r, rIdx] = toTree(a, n, lIdx + 1)
