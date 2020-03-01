@@ -49,24 +49,24 @@ steps:
 */
 
 const node4 = {
-  val: '4'
+  val: 4
 }
 
 const node3 = {
-  val: '3'
+  val: 3
 }
 
 const node2 = {
-  val: '2',
+  val: 2,
   left: node3,
   right: node4
 }
 
 const node5 = {
-  val: '5'
+  val: 5
 }
 const node1 = {
-  val: '1',
+  val: 1,
   left: node2,
   right: node5
 }
@@ -86,6 +86,10 @@ test('deserialize', () => {
 
 test('serialize -> deserialize', () => {
   expect(deserialize(serialize(node1))).toEqual(node1)
+})
+
+test('deserialize -> serialize', () => {
+  expect(serialize(deserialize(node1String))).toEqual(node1String)
 })
 
 const DELIMITER = ', '
@@ -118,7 +122,7 @@ const toTree = (a, p, idx = 0) => {
     return [undefined, idx]
   }
 
-  const n = { val }
+  const n = { val: parseInt(val) }
 
   const [l, lIdx] = toTree(a, n, idx + 1)
   const [r, rIdx] = toTree(a, n, lIdx + 1)
