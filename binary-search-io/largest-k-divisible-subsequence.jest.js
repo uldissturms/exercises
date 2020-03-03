@@ -74,7 +74,7 @@ edge cases:
 no sum works -> zero
 */
 
-test.only('solve', () => {
+test('solve', () => {
   expect(solve([2, 6, 4, 1], 1)).toBe(13)
   expect(solve([1], 0)).toBe(0)
   expect(solve([], 3)).toBe(0)
@@ -89,7 +89,7 @@ test('solve - bigger input', () => {
 })
 
 
-test.only('solve - large input', () => {
+test('solve - large input', () => {
   expect(solve(largeArray, 3)).toEqual(149985453)
 })
 
