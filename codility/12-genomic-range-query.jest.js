@@ -57,7 +57,7 @@ test('solve', () => {
   expect(solve('A', [], [])).toEqual([])
 })
 
-test.only('solve - time', () => {
+test('solve - time', () => {
   const maxN = 1000000
   const maxS = new Array(maxN).fill('A').join('')
   const maxM = 50000
