@@ -1,32 +1,4 @@
-/*
-
-manually:
-
-1 -> 'a' -> 1
-11 -> 'aa', 'k' -> 2
-111 -> 'aaa', 'ka', 'ak' -> 3
-
-solve(0)
-  cc -> '1'
-  cn -> '1'
-  c2 -> '11' v
-  solve(1) -> 2
-    cc -> '1'
-    cn -> '1'
-    c2 -> '11'
-    solve(2) + (1)
-    solve(3) + (1)
-  solve(2) -> 1
-
-*/
-
-/*
-steps:
-1. when index >= length - 1 return 1
-3. determine nr of combinations if take single character at a time
-4. determine nr of combinations if take two characters at a time if valid
-5. return sum of all combinations
-*/
+// [https://leetcode.com/problems/decode-ways]
 
 const fib = (num) => {
   var a = 1, b = 0, temp;
@@ -96,13 +68,6 @@ const valid = (xs) => {
 
   return true
 }
-
-110
-
-1
-  10
-11
-  0
 
 const solve = (xs, idx = 0, m = new Map()) => {
   if (!valid(xs)) {
