@@ -97,19 +97,77 @@ const solveR = (xs, k) => {
   return xs.substring(s, e + 1)
 }
 
+// 012
+// aab
+// 01
+//
+// if current is a valid range
+// if bigger than max -> update the max range
+// else
+// while is not valid range - substract left side until valid again
+
+// sliding window
 const solveI = (xs, k) => {
-  // init array of single letter sets
-  // for length from 1 to n
-  //  append c to set
-  //  determine if the new set size <= k
-  //  update set and result if so
-  //  otherwise set range as closed
-  //  return longest range string if all ranges closed
-  // return longest range string
+  if (xs == null || k <= 0) {
+    throw new Error(`Invalid input: s = ${xs} k = ${k}`)
+  }
+
+  if (k >= xs.length) {
+    return xs
+  }
+
+  const m = new Map()
+
+  let curS = 0
+  let curE = 0
+
+  let maxS = 0
+  let maxE = 0
+
+  m.set(xs[0], 1)
+
+  const addChar = (x) => {
+    const count = m.get(x) || 0
+    m.set(x, count + 1)
+  }
+
+  const removeChar = (x) => {
+    const count = (m.get(x) || 1) - 1
+    if (count === 0) {
+      m.delete(x)
+    } else {
+      m.set(x, count)
+    }
+  }
+
+  const isValid = (m) => {
+    return m.size <= k
+  }
+
+  for (let i = 1; i < xs.length; i++) {
+    const c = xs[i]
+    addChar(c)
+    curE++
+
+    if (isValid(m)) {
+      if (curE - curS > maxE - maxS) {
+        maxS = curS
+        maxE = curE
+      }
+    } else {
+      while (!isValid(m)) {
+        const l = xs[curS]
+        curS++
+        removeChar(l)
+      }
+    }
+  }
+
+  return xs.slice(maxS, maxE + 1)
 }
 
 test('solve', () => {
-  const solve = solveR
+  const solve = solveI
 
   assert.equal(solve('aab', 1), 'aa')
 
