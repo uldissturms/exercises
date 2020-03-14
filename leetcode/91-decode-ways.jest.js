@@ -35,6 +35,10 @@ test('solve', () => {
   expect(solve('x')).toEqual(0)
 })
 
+test('solve - time', () => {
+  expect(solve(new Array(1000).fill('1').join(''))).toEqual(fib(1000))
+})
+
 test('solve - large input', () => {
   const largeInput = new Array(100).fill('1').join('')
   expect(solve(largeInput)).toEqual(fib(100))

@@ -4,3 +4,4 @@ node_modules
 .cache
 dist
 interview-tests
+interview-questions
