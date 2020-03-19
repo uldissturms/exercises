@@ -1,22 +1,25 @@
 // [https://leetcode.com/problems/decode-ways]
 
-const fib = (num) => {
-  var a = 1, b = 0, temp;
+const fib = num => {
+  var a = 1,
+    b = 0,
+    temp
 
-  while (num >= 0){
-    temp = a;
-    a = a + b;
-    b = temp;
-    num--;
+  while (num >= 0) {
+    temp = a
+    a = a + b
+    b = temp
+    num--
   }
 
-  return b;
+  return b
 }
 
 test('solve', () => {
   // simple
   expect(solve('1')).toEqual(fib(1)) // 1
   expect(solve('11')).toEqual(fib(2)) // 2
+  expect(solve('19')).toEqual(fib(2)) // 2
   expect(solve('111')).toEqual(fib(3)) // 3
   expect(solve('1111')).toEqual(fib(4)) // 5
   expect(solve(new Array(10).fill('1').join(''))).toEqual(fib(10)) // 89
@@ -47,7 +50,7 @@ test('solve - large input', () => {
 const isUndefined = x => typeof x === 'undefined'
 const sum = (x, y) => x + y
 
-const valid = (xs) => {
+const valid = xs => {
   // starts with zero
   if (xs[0] === '0') {
     return false
@@ -73,7 +76,8 @@ const valid = (xs) => {
   return true
 }
 
-const solve = (xs, idx = 0, m = new Map()) => {
+
+const solveR = (xs, idx = 0, m = new Map()) => {
   if (!valid(xs)) {
     return 0
   }
@@ -92,8 +96,10 @@ const solve = (xs, idx = 0, m = new Map()) => {
     const nn = cn && parseInt(cc + cn, 10)
 
     const res = [
-      (nn && nn <= 26 && (isUndefined(cnn) || cnn !== '0')) ? dp(xs, idx + 2, m) : 0,
-      (isUndefined(cn) || cn !== '0') ? dp(xs, idx + 1, m) : 0,
+      nn && nn <= 26 && (isUndefined(cnn) || cnn !== '0')
+        ? dp(xs, idx + 2, m)
+        : 0,
+      isUndefined(cn) || cn !== '0' ? dp(xs, idx + 1, m) : 0
     ].reduce(sum, 0)
 
     m.set(idx, res)
@@ -103,3 +109,39 @@ const solve = (xs, idx = 0, m = new Map()) => {
 
   return dp(xs)
 }
+
+const solveI = xs => {
+
+  const len = xs.length
+
+  let oneBack = 1
+  let twoBack = 1
+
+  let res = 1
+
+  for (let i = len - 1; i >= 0; i--) {
+    const c = xs[i]
+    const cn = xs[i + 1]
+
+    if (c < '0' || c > '9') {
+      return 0
+    }
+
+    if (c === '0') {
+      res = 0
+    } else if (c === '1' && cn != null) {
+      res = oneBack + twoBack
+    } else if (c === '2' && cn != null && cn < '7') {
+      res = oneBack + twoBack
+    } else {
+      res = oneBack
+    }
+
+    twoBack = oneBack
+    oneBack = res
+  }
+
+  return res
+}
+
+const solve = solveI
