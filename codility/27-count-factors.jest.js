@@ -40,7 +40,7 @@ const solve = x => {
   return factors
 }
 
-test.skip('solve - sieve', () => {
+test('solve - sieve', () => {
   expect(sieve(2)).toEqual([2])
   expect(sieve(3)).toEqual([2, 3])
   expect(sieve(5)).toEqual([2, 3, 5])
