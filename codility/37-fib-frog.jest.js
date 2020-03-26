@@ -1,4 +1,4 @@
-// [https://app.codility.com/demo/results/trainingMWJ7HX-22G]
+// [https://app.codility.com/demo/results/trainingUJZ7SB-M58]
 
 test('solve', () => {
   // single jump first fib nums (1, 2, 3)
@@ -45,17 +45,22 @@ const solveI = xs => {
 
   for (let i = n - 1; i >= -1; i--) {
     if (i === -1 || xs[i] === 1) {
-      const opts = []
+      let min = Infinity
 
       for (const f of fs) {
         const eI = i + f
+
+        if (eI > n) {
+          break;
+        }
+
         const prev = dp[eI]
-        if (eI <= n && prev < Infinity) {
-          opts.push(prev)
+        if (prev < min) {
+          min = prev
         }
       }
 
-      dp[i] = Math.min(...opts, Infinity) + 1
+      dp[i] = min + 1
     }
   }
 
