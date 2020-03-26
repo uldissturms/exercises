@@ -28,5 +28,28 @@ const gcdDiv = (x, y) => {
   return gcdDiv(y, x % y)
 }
 
+const gcdBin = (x, y, res = 1) => {
+  if (x === y) {
+    return res * x
+  }
 
-const gcd = gcdDiv
+  if (x % 2 === 0 && y % 2 === 0) {
+    return gcdBin(x / 2, y / 2, 2 * res)
+  }
+
+  if (x % 2 === 0) {
+    return gcdBin(x / 2, y, res)
+  }
+
+  if (y % 2 === 0) {
+    return gcdBin(x, y / 2, res)
+  }
+
+  if (x > y) {
+    return gcdBin(x - y, y, res)
+  }
+
+  return gcdBin(x, y - x, res)
+}
+
+const gcd = gcdBin
