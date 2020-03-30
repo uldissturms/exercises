@@ -37,10 +37,6 @@ test('solve', () => {
   expect(solve([1, 1, 3, 1], 3)).toEqual(2)
   expect(solve([1, 3, 1, 1], 3)).toEqual(1)
 
-  expect(solve([1, 2, 3, 1, 1, 5], 5)).toEqual(2)
-})
-
-test.only('s', () => {
   expect(solve([1, 2, 3, 1, 1, 5], 5)).toEqual(5)
   expect(solve([1, 1, 1, 1, 3, 1], 3)).toEqual(4)
   expect(solve([1, 3, 1, 1, 1, 1], 3)).toEqual(1)
