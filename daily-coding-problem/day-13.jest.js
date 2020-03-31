@@ -1,7 +1,7 @@
 test('solve', () => {
   const pi = solve(100000)
   expect(pi).toBeGreaterThanOrEqual(3.12)
-  expect(pi).toBeLessThanOrEqual(3.15)
+  expect(pi).toBeLessThanOrEqual(3.16)
 })
 
 const solve = (iterations) => {
