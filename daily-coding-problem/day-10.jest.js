@@ -8,7 +8,7 @@ test('solve', done => {
 
   solve(() => {
     end = new Date()
-    expect(end - start).toBeGreaterThanOrEqual(sleep)
+    expect(end - start).toBeGreaterThanOrEqual(sleep - 10)
     done()
   }, sleep)
 })
