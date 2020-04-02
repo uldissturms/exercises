@@ -13,13 +13,14 @@ test('solve', () => {
 3   0,  1,   2,   1,   2,   3,   2
 4   0,  1,   2,   1,   1,   2,   2
 */
+
 const solve = (cs, x) => {
   const dp = new Array(x + 1).fill(Infinity)
   dp[0] = 0
 
   for (const c of cs) {
     for (i = c; i <= x; i++) {
-      dp[i] = Math.min(dp[i], dp[i - c] + 1) // 3
+      dp[i] = Math.min(dp[i], dp[i - c] + 1)
     }
   }
 
