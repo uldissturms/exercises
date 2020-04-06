@@ -12,11 +12,7 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
-          command: |
-            ls -la /home/circleci/.local/lib/
-          name: Debug
-      - run:
-          command: pytest
+          command: python -m pytest
           name: Test
 
 workflows:
