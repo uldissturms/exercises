@@ -5,3 +5,6 @@ node_modules
 dist
 interview-tests
 interview-questions
+bin
+lib
+__pycache__
