@@ -87,12 +87,7 @@ const solveR = xs => {
     return r
   }
 
-  const opts = []
-  for (let i = 0; i < len; i++) {
-    opts.push(dp(i, 2, D_L))
-  }
-
-  return Math.max(...opts)
+  return dp(0, 2, D_L)
 }
 
 const solve = solveR
