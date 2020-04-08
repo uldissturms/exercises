@@ -12,33 +12,11 @@ test('solve - recursively', () => {
   expect(solve([10, 5, 7, 11, 6])).toEqual(4)
   expect(solve([1, 10, 4, 2, 7, 5, 9, 8, 6, 3])).toEqual(7)
   expect(solve([15, 13, 5, 7, 4, 10, 12, 8, 2, 11, 6, 9, 3])).toEqual(8)
+
+  // medium
+  // const mediumSize = 2000
+  // expect(solve(new Array(mediumSize).fill(0).map((_, i) => i))).toEqual(mediumSize)
 })
-
-/*
-
-  0 1 2 3 4 5 6 7 8 9 10
-0   *
-1                     *
-2         *
-3     *
-4               *
-5           *
-6                   *
-7                 *
-8              *
-9       *
-
-[1, 10, 4, 2, 7, 5, 9, 8, 6, 3]
-*/
-
-/*
-for each position
-  skip
-  if can pick the position take &
-    hold direction
-    change direction
-  return best so far (max gates)
-*/
 
 
 const D_L = 0
@@ -88,6 +66,9 @@ const solveR = xs => {
   }
 
   return dp(0, 2, D_L)
+}
+
+const solveI = (xs) => {
 }
 
 const solve = solveR

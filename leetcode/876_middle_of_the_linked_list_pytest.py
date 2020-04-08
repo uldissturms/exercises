@@ -8,14 +8,6 @@ class ListNode:
 
 
 def solve(n):
-    # fast and slow pointers
-    '''
-    (1) 0 0 < if fast.next is none - return slow
-    (2) 1 2 if fast is none - return slow
-    (3) 1 2 -> 1 - return slow
-    (4) 2 4 -> 2 - return slow
-    '''
-
     s = n
     f = n
 
