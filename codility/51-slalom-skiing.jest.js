@@ -1,4 +1,5 @@
 // [https://app.codility.com/demo/results/trainingG7U5YH-QYW]
+// [https://app.codility.com/demo/results/trainingAR22MZ-EZ6] - python from (https://codesays.com/2016/solution-to-slalom-skiing-by-codility/)
 
 test('solve - recursively', () => {
   // simple
@@ -8,16 +9,18 @@ test('solve - recursively', () => {
   expect(solve([1, 2, 3])).toEqual(3)
 
   // examples
-  expect(solve([543, 123])).toEqual(2)
   expect(solve([10, 5, 7, 11, 6])).toEqual(4)
   expect(solve([1, 10, 4, 2, 7, 5, 9, 8, 6, 3])).toEqual(7)
   expect(solve([15, 13, 5, 7, 4, 10, 12, 8, 2, 11, 6, 9, 3])).toEqual(8)
 
   // medium
-  // const mediumSize = 2000
-  // expect(solve(new Array(mediumSize).fill(0).map((_, i) => i))).toEqual(mediumSize)
-})
+  const mediumSize = 2000
+  expect(solve(new Array(mediumSize).fill(0).map((_, i) => i))).toEqual(mediumSize + 1)
 
+  // large
+  const largeSize = 100000
+  expect(solve(new Array(largeSize).fill(0).map((_, i) => i))).toEqual(largeSize + 1)
+})
 
 const D_L = 0
 const D_R = 1
@@ -68,7 +71,53 @@ const solveR = xs => {
   return dp(0, 2, D_L)
 }
 
-const solveI = (xs) => {
+const solveI = xs => {
+  const lis = xs => {
+    const len = xs.length
+
+    ev = new Array(len + 1).fill(undefined)
+    longest = 0
+
+    for (let i = 0; i < len; i++) {
+      const x = xs[i]
+
+      // binary search
+      lI = 0
+      hI = longest
+
+      while (lI <= hI) {
+        const mI = Math.floor((lI + hI) / 2)
+        const mV = ev[mI]
+        if (x < mV) {
+          hI = mI - 1
+        } else {
+          lI = mI + 1
+        }
+      }
+
+
+      if (ev[lI] == null) {
+        ev[lI] = x
+        longest++
+      } else {
+        ev[lI] = Math.min(x, ev[lI])
+      }
+    }
+
+    return longest
+  }
+
+  const b = xs.length && Math.max(...xs) + 1
+  const mv = []
+  for (const x of xs) {
+    mv.push(
+      b * 2 + x,
+      b * 2 - x,
+      x
+    )
+  }
+
+  return lis(mv)
 }
 
-const solve = solveR
+const solve = solveI

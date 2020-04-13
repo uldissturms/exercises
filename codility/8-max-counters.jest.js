@@ -16,15 +16,8 @@ const solve = (n, as) => {
   let max = init
   let maxSet = init
 
-  const setToMax = () => {
-    for (let i = 0; i < ns.length; i++) {
-      ns[i] = max
-    }
-    min = max
-  }
-
   for (const a of as) {
-    if (a == n + 1) {
+    if (a === n + 1) {
       maxSet = max
     } else {
       const v = Math.max(maxSet, ns[a - 1]) + 1
@@ -44,5 +37,5 @@ const solve = (n, as) => {
 
 /*
 keep track of max and set value Math.max(maxSet, ns[a - 1]) + 1 on each increment
-fill in all the zeros with max value set at the end
+adjust all value with max set at the end
 */
