@@ -61,5 +61,5 @@ def test_empty():
 
 
 def test_single():
-    assert(solve([0])) == 0
+    assert(solve([0])) == 1
     assert(solve([1])) == 0
