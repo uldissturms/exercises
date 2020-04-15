@@ -118,4 +118,30 @@ const solveI = (xs, ys) => {
 
 }
 
-const solve = solveI
+// https://en.wikipedia.org/wiki/Levenshtein_distance
+const solveIB = (xs, ys) => {
+  const xL = xs.length
+  const yL = ys.length
+
+  let v0 = new Array(yL + 1).fill(0)
+  let v1 = new Array(yL + 1).fill(0)
+
+  for (let i = 0; i <= yL; i++) {
+    v0[i] = i
+  }
+
+  for (let i = 0; i < xL; i++) {
+    v1[0] = i + 1
+    for (let j = 0; j < yL; j++) {
+      const dc = v0[j + 1] + 1
+      const ic = v1[j] + 1
+      const sc = xs[i] === ys[j] ? v0[j] : v0[j] + 1
+      v1[j + 1] = Math.min(dc, ic, sc)
+    }
+    [v0, v1] = [v1, v0]
+  }
+
+  return v0[yL]
+}
+
+const solve = solveIB
