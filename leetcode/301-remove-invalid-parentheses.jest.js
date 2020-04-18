@@ -20,6 +20,7 @@ test('solve', () => {
   // examples
   expect(solve('()())()')).toEqual(['(())()', '()()()'])
   expect(solve('(a)())()')).toEqual(['(a())()', '(a)()()'])
+  expect(solve(')()(')).toEqual(['()'])
 })
 
 test('invalid', () => {
@@ -55,27 +56,22 @@ const invalid = xs => {
   return [o, c]
 }
 
-const valid = xs => {
-  const [o, c] = invalid(xs)
-  return o === 0 && c === 0
-}
-
 const solve = s => {
   const xs = s.split('')
   const len = xs.length
   const [oL, cL] = invalid(xs)
   const res = new Set()
 
-  const dfs = (i, o, c) => {
-    if (o === 0 && c === 0) {
-      if (valid(xs)) {
-        res.add(xs.filter(x => x !== '.').join(''))
-      }
-
+  const dfs = (i, o, c, oC, cC) => {
+    if (cC > oC) {
       return
     }
 
     if (i === len) {
+      if (o === 0 && c === 0) {
+        res.add(xs.filter(x => x !== '.').join(''))
+      }
+
       return
     }
 
@@ -83,20 +79,23 @@ const solve = s => {
 
     if (o > 0 && x === '(') {
       xs[i] = '.'
-      dfs(i + 1, o - 1, c) // skip (
+      dfs(i + 1, o - 1, c, oC, cC) // skip (
       xs[i] = x
     }
 
     if (c > 0 && x === ')') {
       xs[i] = '.'
-      dfs(i + 1, o, c - 1) // skip )
+      dfs(i + 1, o, c - 1, oC, cC) // skip )
       xs[i] = x
     }
 
-    dfs(i + 1, o, c) // leave
+    incO = x == '(' ? 1 : 0
+    incC = x == ')' ? 1 : 0
+
+    dfs(i + 1, o, c, oC + incO, cC + incC) // leave
   }
 
-  dfs(0, oL, cL)
+  dfs(0, oL, cL, 0, 0)
 
   return Array.from(res)
 }
