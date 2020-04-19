@@ -15,12 +15,11 @@ test('solve', () => {
     [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
     [ 10, 9, 8, 6, 7, 5, 4, 3, 2, 1, 9, 10, 8, 7, 6, 5, 4, 3, 2, 1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ]
   ].forEach(xs => {
-    expect(flipped(solve(xs), xs)).toEqual([...xs].sort((x, y) => x - y))
+    expect(flipped(solve([...xs]), [...xs])).toEqual([...xs].sort((x, y) => x - y))
   })
 })
 
-const flipped = (flips, ns) => {
-  const xs = [...ns]
+const flipped = (flips, xs) => {
 
   for (const f of flips) {
     flip(f - 1, xs)
@@ -29,11 +28,10 @@ const flipped = (flips, ns) => {
   return xs
 }
 
-const flip = (i, xs) => {
-  const mid = Math.floor(i / 2)
-
-  for (let j = 0; j <= mid; j++) {
-    ;[xs[j], xs[i - j]] = [xs[i - j], xs[j]]
+const flip = (k, xs) => {
+  const mid = Math.floor(k / 2)
+  for (let i = 0; i <= mid; i++) {
+    ;[xs[i], xs[k - i]] = [xs[k - i], xs[i]]
   }
 }
 
@@ -43,8 +41,7 @@ const flip = (i, xs) => {
 //   if max is not at the current length
 //     swap max with beginning
 //     swap beginning with length
-const solve = ns => {
-  const xs = [...ns]
+const solve = xs => {
   const len = xs.length
 
   const max = i => {
