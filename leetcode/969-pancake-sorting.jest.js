@@ -15,12 +15,16 @@ test('solve', () => {
     [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
     [ 10, 9, 8, 6, 7, 5, 4, 3, 2, 1, 9, 10, 8, 7, 6, 5, 4, 3, 2, 1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ]
   ].forEach(xs => {
-    expect(flipped(solve([...xs]), [...xs])).toEqual([...xs].sort((x, y) => x - y))
+    expect(flipped(solve([...xs]), [...xs])).toEqual(
+      [...xs].sort((x, y) => x - y)
+    )
+    expect(flipped(solveNS([...xs]), [...xs])).toEqual(
+      [...xs].sort((x, y) => x - y)
+    )
   })
 })
 
 const flipped = (flips, xs) => {
-
   for (const f of flips) {
     flip(f - 1, xs)
   }
@@ -68,4 +72,24 @@ const solve = xs => {
   }
 
   return res
+}
+
+const solveNS = xs => {
+  const rs = []
+  let n = xs.length
+  const ys = new Array(n)
+    .fill(0)
+    .map((_, i) => i + 1)
+    .sort((x, y) => xs[y - 1] - xs[x - 1])
+  for (const y of ys) {
+    let i = y
+    for (const r of rs) {
+      if (i <= r) {
+        i = r + 1 - i
+      }
+    }
+    rs.push(i, n)
+    n--
+  }
+  return rs
 }
