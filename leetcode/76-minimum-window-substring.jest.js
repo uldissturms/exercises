@@ -30,22 +30,15 @@ const solve = (cs, xs) => {
     return m
   }
 
-  const atLeast = (xs, ys) => {
-    for (let [k, v] of ys) {
-      if ((xs.get(k) || 0) < v) {
-        return false
-      }
-    }
-
-    return true
-  }
-
   const o = toCounts(cs)
   const c = new Map()
 
+  const rL = o.size
+  let fL = 0
+
   let bI = 0
 
-  let rL = Infinity
+  let resL = Infinity
   let rS = 0
   let rE = 0
 
@@ -53,14 +46,18 @@ const solve = (cs, xs) => {
     const x = xs[i]
 
     if (o.has(x)) {
-      c.set(x, (c.get(x) || 0) + 1)
+      const v = (c.get(x) || 0) + 1
+      c.set(x, v)
+      if (v === o.get(x)) {
+        fL++
+      }
     }
 
-    while (atLeast(c, o)) {
+    while (fL === rL) {
       const cL = i - bI + 1
 
-      if (cL < rL) {
-        rL = cL
+      if (cL < resL) {
+        resL = cL
         rS = bI
         rE = i + 1
       }
@@ -68,7 +65,11 @@ const solve = (cs, xs) => {
       const b = xs[bI]
 
       if (c.has(b)) {
-        c.set(b, c.get(b) - 1)
+        const v = c.get(b) - 1
+        c.set(b, v)
+        if (v < o.get(b)) {
+          fL--
+        }
       }
 
       bI++
