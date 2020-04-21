@@ -1,5 +1,20 @@
 // [https://leetcode.com/problems/add-and-search-word-data-structure-design]
 
+test('solve', () => {
+  const wd = new WordDictionary()
+  wd.addWord('test')
+
+  expect(wd.search('test')).toEqual(true)
+  expect(wd.search('.est')).toEqual(true)
+  expect(wd.search('t.st')).toEqual(true)
+  expect(wd.search('te.t')).toEqual(true)
+  expect(wd.search('tes.')).toEqual(true)
+  expect(wd.search('....')).toEqual(true)
+
+  expect(wd.search('.')).toEqual(false)
+  expect(wd.search('..')).toEqual(false)
+  expect(wd.search('testing')).toEqual(false)
+})
 /**
  * Initialize your data structure here.
  */
