@@ -1,12 +1,11 @@
 // [https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times]
 
 test('solve', () => {
-
   const read4 = (xs, offset) => {
     const len = xs.length
     let loc = offset
 
-    return (buf) => {
+    return buf => {
       let bI = 0
 
       let diff = len - loc // loc: 0 len: 1 -> 1, loc: 1, len: 1 -> 0
@@ -90,52 +89,83 @@ test('solve', () => {
   expect(buf.join('')).toEqual(input.substring(0, 20))
 })
 
-var solution = function(read4) {
-    const len = 4
-    const tmp = new Array(len)
-    let loc = 0
-    let lastRead = 0
+var solutionF = function(read4) {
+  const len = 4
+  const tmp = new Array(len)
+  let loc = 0
+  let lastRead = 0
 
-    /**
-     * @param {character[]} buf Destination buffer
-     * @param {number} n Number of characters to read
-     * @return {number} The number of actual characters read
-     */
-    return function(buf, n) {
-        let left = n
-        let total = 0
-        let diff = lastRead - loc // 3 2
-        let bI = 0
+  /**
+   * @param {character[]} buf Destination buffer
+   * @param {number} n Number of characters to read
+   * @return {number} The number of actual characters read
+   */
+  return function(buf, n) {
+    let left = n
+    let total = 0
+    let diff = lastRead - loc // 3 2
+    let bI = 0
 
-        if (diff > 0) {
-          const take = Math.min(left, diff)
+    if (diff > 0) {
+      const take = Math.min(left, diff)
 
-          for (i = 0; i < take; i++) {
-            buf[bI++] = tmp[loc++]
-          }
+      for (i = 0; i < take; i++) {
+        buf[bI++] = tmp[loc++]
+      }
 
-          left -= take
-          total += take
-        }
+      left -= take
+      total += take
+    }
 
-        while (left > 0) {
-          loc = 0
-          lastRead = read4(tmp)
-          const req = Math.min(left, lastRead)
+    while (left > 0) {
+      loc = 0
+      lastRead = read4(tmp)
+      const req = Math.min(left, lastRead)
 
-          for (let i = 0; i < req; i++) {
-            buf[bI++] = tmp[i]
-            loc++
-          }
+      for (let i = 0; i < req; i++) {
+        buf[bI++] = tmp[i]
+        loc++
+      }
 
-          left -= req
-          total += req
+      left -= req
+      total += req
 
-          if (lastRead === 0) {
-            return total
-          }
-        }
-
+      if (lastRead === 0) {
         return total
-    };
-};
+      }
+    }
+
+    return total
+  }
+}
+
+var solution = function(read4) {
+  let buffer = new Array(4)
+  let pos = 0
+  let lastRead = 0
+
+  return function(buf, n) {
+    let cur = 0
+    let bI = 0
+
+    while (cur < n) {
+      while (cur < n && lastRead > 0 && pos < lastRead) {
+        buf[bI++] = buffer[pos++]
+        cur++
+      }
+
+      if (cur === n) {
+        return cur
+      }
+
+      pos = 0
+      lastRead = read4(buffer)
+
+      if (lastRead === 0) {
+        return cur
+      }
+    }
+
+    return cur
+  }
+}
