@@ -58,13 +58,6 @@ test t -> to number (number)
 test o -> One, Two, Three...
 */
 
-let billion = Math.pow(10, 9)
-let million = Math.pow(10, 6)
-let thousand = Math.pow(10, 3)
-let hundred = Math.pow(10, 2)
-let ten = Math.pow(10, 1)
-let one = Math.pow(10, 0)
-
 const ones = [
   'Zero',
   'One',
@@ -75,7 +68,7 @@ const ones = [
   'Six',
   'Seven',
   'Eight',
-  'Nine',
+  'Nine'
 ]
 
 const tens = {
@@ -87,7 +80,7 @@ const tens = {
   6: 'Sixty',
   7: 'Seventy',
   8: 'Eighty',
-  9: 'Ninety',
+  9: 'Ninety'
 }
 
 const teens = {
@@ -100,73 +93,45 @@ const teens = {
   16: 'Sixteen',
   17: 'Seventeen',
   18: 'Eighteen',
-  19: 'Nineteen',
+  19: 'Nineteen'
 }
 
+const ps = [[9, 'Billion'], [6, 'Million'], [3, 'Thousand'], [2, 'Hundred']]
 
-const solve = (n) => {
-  const toNumber = (n) => {
+const solve = n => {
+  const toNumber = n => {
     let x = n
     const res = []
-    let ts = 0
-    let base = billion
 
     if (x < 10) {
-      return [
-        ones[x]
-      ]
+      return [ones[x]]
     }
 
     while (x > 0) {
-
-      base = billion
-      ts = Math.floor(x / base)
-
-      if (ts > 0) {
-        res.push(...toNumber(ts), 'Billion')
-        x = x - (ts * base)
+      for (const [p, w] of ps) {
+        const m = Math.pow(10, p)
+        const ts = Math.floor(x / m)
+        if (ts > 0) {
+          res.push(...toNumber(ts), w)
+        }
+        x -= m * ts
       }
 
-      base = million
-      ts = Math.floor(x / base)
-
-      if (ts > 0) {
-        res.push(...toNumber(ts), 'Million')
-        x = x - (ts * base)
-      }
-
-      base = thousand
-      ts = Math.floor(x / base)
-
-      if (ts > 0) {
-        res.push(...toNumber(ts), 'Thousand')
-        x = x - (ts * base)
-      }
-
-      base = hundred
-      ts = Math.floor(x / base)
-
-      if (ts > 0) {
-        res.push(...toNumber(ts), 'Hundred')
-        x = x - (ts * base)
-      }
-
-      base = ten
-      ts = Math.floor(x / base)
-
-      if (ts > 1) {
+      if (x >= 20) {
+        const m = 10
+        const ts = Math.floor(x / m)
         res.push(tens[ts])
-        x = x - (ts * base)
+        x -= m * ts
       }
 
-      if (ts === 1) {
+      if (x >= 10) {
         res.push(teens[x])
-        x = 0
+        return res
       }
 
       if (x > 0) {
         res.push(ones[x])
-        x = 0
+        return res
       }
     }
 
