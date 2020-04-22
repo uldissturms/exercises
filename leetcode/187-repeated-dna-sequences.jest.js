@@ -1,4 +1,5 @@
 // [https://leetcode.com/problems/repeated-dna-sequences]
+// [https://leetcode.com/articles/repeated-dna-sequences]
 
 test('solve', () => {
   expect(solve('AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT')).toEqual([
