@@ -12,23 +12,15 @@ test('solve', () => {
   expect(solve('abab', 'ab')).toEqual([0, 1, 2])
 })
 
-const solve = (xs, ps) => {
-
-  const xL = xs.length
-  const pL = ps.length
-
-  if (xL === 0 || pL === 0 || xL < pL) {
-    return []
+const countsFor = xs => {
+  const m = new Map()
+  for (const x of xs) {
+    m.set(x, (m.get(x) || 0) + 1)
   }
+  return m
+}
 
-  const countsFor = (xs) => {
-    const m = new Map()
-    for (const x of xs) {
-      m.set(x, (m.get(x) || 0) + 1)
-    }
-    return m
-  }
-
+const solveO = (xs, ps) => {
   const res = []
 
   const cs = countsFor(ps)
@@ -38,7 +30,7 @@ const solve = (xs, ps) => {
   let formed = 0
   let bI = 0
 
-  for (let i = 0; i < xL; i++) {
+  for (let i = 0; i < xs.length; i++) {
     const x = xs[i]
 
     if (cs.has(x)) {
@@ -75,9 +67,18 @@ const solve = (xs, ps) => {
 
       bI++
     }
-
   }
 
   return res
+}
 
+const solve = (xs, ps) => {
+  const xL = xs.length
+  const pL = ps.length
+
+  if (xL === 0 || pL === 0 || xL < pL) {
+    return []
+  }
+
+  return solveO(xs, ps)
 }
