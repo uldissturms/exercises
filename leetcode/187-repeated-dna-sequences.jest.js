@@ -18,7 +18,7 @@ const ints = {
   T: 3
 }
 
-const solve = xs => {
+const solveRK = xs => {
   const len = xs.length
   if (len <= L) {
     return []
@@ -49,3 +49,37 @@ const solve = xs => {
 
   return [...res]
 }
+
+const solveBM = xs => {
+  const len = xs.length
+  if (len <= L) {
+    return []
+  }
+
+  let bitmask = 0
+  const seen = new Set()
+  const res = new Set()
+
+  // build rolling hash
+  for (let i = 0; i < L; i++) {
+    bitmask <<= 2
+    bitmask |= ints[xs[i]]
+  }
+
+  seen.add(bitmask)
+
+  for (let i = 1; i <= len - L; i++) {
+    // update rolling hash
+    bitmask <<= 2
+    bitmask |= ints[xs[i + L - 1]]
+    bitmask &= ~(3 << 2 * L)
+    if (seen.has(bitmask)) {
+      res.add(xs.substring(i, i + L))
+    }
+    seen.add(bitmask)
+  }
+
+  return [...res]
+}
+
+const solve = solveBM
