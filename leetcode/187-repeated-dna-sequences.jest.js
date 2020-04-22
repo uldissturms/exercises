@@ -27,22 +27,20 @@ const solve = xs => {
   const base = 4
   const baseL = Math.pow(base, L)
 
-  const ns = xs.split('').map(x => ints[x])
-
   let hash = 0
   const seen = new Set()
   const res = new Set()
 
   // build rolling hash
   for (let i = 0; i < L; i++) {
-    hash = hash * base + ns[i]
+    hash = hash * base + ints[xs[i]]
   }
 
   seen.add(hash)
 
   for (let i = 1; i <= len - L; i++) {
     // update rolling hash
-    hash = hash * base - ns[i - 1] * baseL + ns[i + L - 1]
+    hash = hash * base - ints[xs[i - 1]] * baseL + ints[xs[i + L - 1]]
     if (seen.has(hash)) {
       res.add(xs.substring(i, i + L))
     }
