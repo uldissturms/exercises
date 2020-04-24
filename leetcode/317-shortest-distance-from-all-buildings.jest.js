@@ -12,17 +12,13 @@ test('solve', () => {
   expect(solve(xs)).toEqual(3700)
 })
 
-const EMPTY = 0
-const HOUSE = 1
-const OBSTACLE = 2
-
 const houses = xs => {
   const res = []
 
   for (let i = 0; i < xs.length; i++) {
     for (let j = 0; j < xs[i].length; j++) {
       const x = xs[i][j]
-      if (x === HOUSE) {
+      if (x === 1) {
         res.push([i, j])
       }
     }
@@ -30,8 +26,6 @@ const houses = xs => {
 
   return res
 }
-
-const key = xs => xs.join('_')
 
 const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
@@ -44,20 +38,21 @@ const distances = (h, xs, ys) => {
   const n = xs.length
   const m = xs[0].length
 
-  const seen = Array.from({length: n}, () => Array.from({length: m}, () => false))
+  const seen = Array.from({ length: n }, () =>
+    Array.from({ length: m }, () => false)
+  )
 
   const valid = ([xI, xJ]) =>
     xI >= 0 &&
     xJ >= 0 &&
     xI < xs.length &&
     xJ < xs[xI].length &&
-    xs[xI][xJ] === EMPTY &&
+    xs[xI][xJ] === 0 &&
     !seen[xI][xJ]
 
   while (qs.length > 0) {
     const c = qs.pop()
     const [cI, cJ] = c
-    const k = key(c)
 
     if (!seen[cI][cJ]) {
       seen[cI][cJ] = true
@@ -65,9 +60,9 @@ const distances = (h, xs, ys) => {
       y.l += level
       y.c++
       for (const [dI, dJ] of directions) {
-        const [nI, nJ] = [cI + dI, cJ + dJ]
-        if (valid([nI, nJ])) {
-          cs.push([nI, nJ])
+        const n = [cI + dI, cJ + dJ]
+        if (valid(n)) {
+          cs.push(n)
         }
       }
     }
@@ -108,7 +103,7 @@ const solve = xs => {
     for (let j = 0; j < m; j++) {
       const x = xs[i][j]
       const { l, c } = ds[i][j]
-      if (x === EMPTY && c === hl) {
+      if (x === 0 && c === hl) {
         if (l < min) {
           min = l
         }
