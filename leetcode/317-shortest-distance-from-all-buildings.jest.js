@@ -33,22 +33,7 @@ const houses = xs => {
 
 const key = xs => xs.join('_')
 
-const oneAway = ([xI, xJ], v, xs, seen) => {
-  return [
-    [xI - 1, xJ], // top
-    [xI + 1, xJ], // bottom
-    [xI, xJ - 1], // left
-    [xI, xJ + 1] // right
-  ].filter(
-    ([cI, cJ]) =>
-      cI >= 0 &&
-      cJ >= 0 &&
-      cI < xs.length &&
-      cJ < xs[cI].length &&
-      xs[cI][cJ] === v &&
-      !seen.has(key([cI, cJ]))
-  )
-}
+const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
 // bfs
 const distances = (h, xs, ys) => {
@@ -57,6 +42,14 @@ const distances = (h, xs, ys) => {
   let level = 0
 
   const seen = new Set()
+
+  const valid = ([xI, xJ]) =>
+    xI >= 0 &&
+    xJ >= 0 &&
+    xI < xs.length &&
+    xJ < xs[xI].length &&
+    xs[xI][xJ] === EMPTY &&
+    !seen.has(key([xI, xJ]))
 
   while (qs.length > 0) {
     const c = qs.pop()
@@ -68,7 +61,12 @@ const distances = (h, xs, ys) => {
       y = ys[cI][cJ]
       y.l += level
       y.c++
-      cs.push(...oneAway(c, EMPTY, xs, seen))
+      for (const [dI, dJ] of directions) {
+        const [nI, nJ] = [cI + dI, cJ + dJ]
+        if (valid([nI, nJ])) {
+          cs.push([nI, nJ])
+        }
+      }
     }
 
     if (qs.length === 0) {
@@ -96,14 +94,18 @@ const expand = (hs, xs) => {
 
 const solve = xs => {
   const hs = houses(xs)
+  const hl = hs.length
   const ds = expand(hs, xs)
   let min = Infinity
 
-  for (let i = 0; i < xs.length; i++) {
-    for (let j = 0; j < xs[i].length; j++) {
+  const n = xs.length
+  const m = xs[0].length
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
       const x = xs[i][j]
       const { l, c } = ds[i][j]
-      if (x === EMPTY && c === hs.length) {
+      if (x === EMPTY && c === hl) {
         if (l < min) {
           min = l
         }
