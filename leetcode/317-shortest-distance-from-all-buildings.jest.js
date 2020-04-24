@@ -6,7 +6,9 @@ test('solve', () => {
   const size = 50
   const xs = new Array(size)
     .fill(0)
-    .map(() => new Array(size).fill(0).map((_, i) => (i === 0 || i === size - 1 ? 1 : 0)))
+    .map(() =>
+      new Array(size).fill(0).map((_, i) => (i === 0 || i === size - 1 ? 1 : 0))
+    )
   expect(solve(xs)).toEqual(3700)
 })
 
@@ -49,7 +51,7 @@ const oneAway = ([xI, xJ], v, xs, seen) => {
 }
 
 // bfs
-const distances = (h, xs, hm) => {
+const distances = (h, xs, ys) => {
   let qs = [h]
   let cs = []
   let level = 0
@@ -58,11 +60,14 @@ const distances = (h, xs, hm) => {
 
   while (qs.length > 0) {
     const c = qs.pop()
+    const [cI, cJ] = c
     const k = key(c)
 
     if (!seen.has(k)) {
       seen.add(k)
-      hm.set(k, level)
+      y = ys[cI][cJ]
+      y.l += level
+      y.c++
       cs.push(...oneAway(c, EMPTY, xs, seen))
     }
 
@@ -75,45 +80,36 @@ const distances = (h, xs, hm) => {
 }
 
 const expand = (hs, xs) => {
-  const m = new Map()
+  const n = xs.length
+  const m = xs[0].length
+
+  const ys = Array.from({ length: n }, () =>
+    Array.from({ length: m }, () => ({ l: 0, c: 0 }))
+  )
+
   for (const h of hs) {
-    const hk = key(h)
-    const hm = new Map()
-    m.set(hk, hm)
-    distances(h, xs, hm)
+    distances(h, xs, ys)
   }
-  return m
+
+  return ys
 }
 
 const solve = xs => {
   const hs = houses(xs)
   const ds = expand(hs, xs)
-  let best = Infinity
-
-  const m = new Map()
+  let min = Infinity
 
   for (let i = 0; i < xs.length; i++) {
     for (let j = 0; j < xs[i].length; j++) {
       const x = xs[i][j]
-      if (x === EMPTY) {
-        const lk = key([i, j])
-        let sum = 0
-
-        for (const h of hs) {
-          const hk = key(h)
-          const d = (ds.get(hk) || new Map()).get(lk)
-          sum += d || Infinity
-          if (sum === Infinity) {
-            break
-          }
-        }
-
-        if (sum < best) {
-          best = sum
+      const { l, c } = ds[i][j]
+      if (x === EMPTY && c === hs.length) {
+        if (l < min) {
+          min = l
         }
       }
     }
   }
 
-  return best === Infinity ? -1 : best
+  return min === Infinity ? -1 : min
 }
