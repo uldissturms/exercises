@@ -41,7 +41,10 @@ const distances = (h, xs, ys) => {
   let cs = []
   let level = 0
 
-  const seen = new Set()
+  const n = xs.length
+  const m = xs[0].length
+
+  const seen = Array.from({length: n}, () => Array.from({length: m}, () => false))
 
   const valid = ([xI, xJ]) =>
     xI >= 0 &&
@@ -49,15 +52,15 @@ const distances = (h, xs, ys) => {
     xI < xs.length &&
     xJ < xs[xI].length &&
     xs[xI][xJ] === EMPTY &&
-    !seen.has(key([xI, xJ]))
+    !seen[xI][xJ]
 
   while (qs.length > 0) {
     const c = qs.pop()
     const [cI, cJ] = c
     const k = key(c)
 
-    if (!seen.has(k)) {
-      seen.add(k)
+    if (!seen[cI][cJ]) {
+      seen[cI][cJ] = true
       y = ys[cI][cJ]
       y.l += level
       y.c++
