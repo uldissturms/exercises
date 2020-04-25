@@ -4,12 +4,11 @@ test('solve', () => {
   expect(solve([])).toEqual(true)
   expect(solve([[]])).toEqual(true)
   expect(solve([[1, 3], [0, 2], [1, 3], [0, 2]])).toEqual(true)
-  expect(solve([[[4], [2, 3], [1], [3], [0]]])).toEqual(true)
 
   expect(solve([[1, 2, 3], [0, 2], [0, 1, 3], [0, 2]])).toEqual(false)
 })
 
-const solve = xs => {
+const solveSet = xs => {
   if (xs.length < 2) {
     return true
   }
@@ -22,7 +21,7 @@ const solve = xs => {
   a.add(0)
   b.add(fst[0])
 
-  const opposite = x => (x === a ? b : a)
+  const opp = x => (x === a ? b : a)
 
   const expand = (i, fs) => {
     if (seen.has(i)) {
@@ -31,7 +30,7 @@ const solve = xs => {
 
     seen.add(i)
 
-    const ts = opposite(fs)
+    const ts = opp(fs)
 
     const es = xs[i]
 
@@ -61,3 +60,32 @@ const solve = xs => {
 
   return true
 }
+
+const solveArr = xs => {
+  const opp = x => x ^ 1
+  const sets = new Array(xs.length).fill(undefined)
+
+  for (let i = 0; i < xs.length; i++) {
+    if (sets[i] == null) {
+      sets[i] = 0
+      const stack = [i]
+      while (stack.length > 0) {
+        const p = stack.pop()
+        for (const e of xs[p]) {
+          if (sets[e] === sets[p]) {
+            return false
+          }
+
+          if (sets[e] == null) {
+            sets[e] = opp(sets[p])
+            stack.push(e)
+          }
+        }
+      }
+    }
+  }
+
+  return true
+}
+
+const solve = solveArr
