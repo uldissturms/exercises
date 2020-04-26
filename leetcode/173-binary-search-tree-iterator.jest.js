@@ -39,6 +39,7 @@ test('solve', () => {
   expect(bst.next()).toEqual(undefined)
 })
 
+// generator
 function gen(r) {
   const dfs = function*(n) {
     if (n == null) {
@@ -53,15 +54,11 @@ function gen(r) {
   return dfs(r)
 }
 
-var BSTIterator = function(root) {
+var BSTIteratorG = function(root) {
   this.iter = gen(root)
 }
 
-/**
- * @return the next smallest number
- * @return {number}
- */
-BSTIterator.prototype.next = function() {
+BSTIteratorG.prototype.next = function() {
   if (this.nextItem == null) {
     this.nextItem = this.iter.next()
   }
@@ -73,14 +70,39 @@ BSTIterator.prototype.next = function() {
   return value
 }
 
-/**
- * @return whether we have a next smallest number
- * @return {boolean}
- */
-BSTIterator.prototype.hasNext = function() {
+BSTIteratorG.prototype.hasNext = function() {
   if (this.nextItem == null) {
     this.nextItem = this.iter.next()
   }
 
   return !this.nextItem.done
 }
+
+const addNodesToStack = (n, stack) => {
+  while (n) {
+    stack.push(n)
+    n = n.left
+  }
+}
+
+// stack
+var BSTIteratorS = function(root) {
+  this.stack = []
+  addNodesToStack(root, this.stack)
+}
+
+BSTIteratorS.prototype.next = function() {
+  const n = this.stack.pop()
+
+  if (n && n.right) {
+    addNodesToStack(n.right, this.stack)
+  }
+
+  return n && n.val
+}
+
+BSTIteratorS.prototype.hasNext = function() {
+  return this.stack.length > 0
+}
+
+BSTIterator = BSTIteratorG
