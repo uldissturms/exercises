@@ -19,8 +19,10 @@ test('solve', () => {
 
 const max = 2147483647
 const min = -2147483648
+const halfMin = -1073741824 // min / 2
 
-const solve = (x, y) => {
+// O(log^2(x))
+const solveBS = (x, y) => {
   if (x === min && y === 1) {
     return min
   }
@@ -73,3 +75,48 @@ const diff = (x, y, p) => {
 
   return Math.min(q, max)
 }
+
+// O(logx)
+const solvePow = (x, y) => {
+  if (x === min && y === -1) {
+    return max
+  }
+
+  let negatives = 2
+  if (x >= 0) {
+    negatives--
+    x = -x
+  }
+  if (y >= 0) {
+    negatives--
+    y = -y
+  }
+
+  const ds = []
+  const ps = []
+
+  let pot = 1
+
+  while (y >= x) {
+    ds.push(y)
+    ps.push(pot)
+    if (y < halfMin) {
+      break;
+    }
+    y += y
+    pot += pot
+  }
+
+  let q = 0
+  for (let i = ds.length - 1; i >= 0; i--) {
+    const d = ds[i]
+    if (x <= d) {
+      x -= d
+      q += ps[i]
+    }
+  }
+
+  return negatives === 1 ? -q : q
+}
+
+const solve = solvePow
