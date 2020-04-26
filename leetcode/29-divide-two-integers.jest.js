@@ -119,4 +119,42 @@ const solvePow = (x, y) => {
   return negatives === 1 ? -q : q
 }
 
-const solve = solvePow
+// O(logx)
+const solvePowConstSpace = (x, y) => {
+  if (x === min && y === -1) {
+    return max
+  }
+
+  let negatives = 2
+  if (x >= 0) {
+    negatives--
+    x = -x
+  }
+  if (y >= 0) {
+    negatives--
+    y = -y
+  }
+
+  let hd = y
+  let hpot = -1
+
+  while (hd >= halfMin && x <= hd + hd) {
+    hd += hd
+    hpot += hpot
+  }
+
+  let q = 0
+  while (x <= y) {
+    if (x <= hd) {
+      q += hpot
+      x -= hd
+    }
+
+    hpot >>= 1
+    hd >>= 1
+  }
+
+  return negatives === 1 || q === 0 ? q : -q
+}
+
+const solve = solvePowConstSpace
