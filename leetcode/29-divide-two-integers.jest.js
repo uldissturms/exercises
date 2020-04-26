@@ -1,4 +1,5 @@
 // [https://leetcode.com/problems/divide-two-integers]
+// [https://leetcode.com/articles/divide-integers]
 
 test('solve', () => {
   expect(solve(10, 3)).toEqual(3)
@@ -156,5 +157,44 @@ const solvePowConstSpace = (x, y) => {
 
   return negatives === 1 || q === 0 ? q : -q
 }
+
+// O(logx)
+const solveLongDiv = (x, y) => {
+  if (x === min && y === -1) {
+    return max
+  }
+
+  if (x === min && y === 1) {
+    return min
+  }
+
+  let negatives = 2
+  if (x >= 0) {
+    negatives--
+    x = -x
+  }
+  if (y >= 0) {
+    negatives--
+    y = -y
+  }
+
+  let mb = 0
+  while (y >= halfMin && y + y >= x) {
+    mb += 1
+    y += y
+  }
+
+  let q = 0
+  for (let b = mb; b >= 0; b--) {
+    if (y >= x) {
+      q -= (1 << b)
+      x -= y
+    }
+    y = (y + 1) >> 1
+  }
+
+  return negatives === 1 || q === 0 ? q : -q
+}
+
 
 const solve = solvePowConstSpace
