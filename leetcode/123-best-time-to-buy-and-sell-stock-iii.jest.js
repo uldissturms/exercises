@@ -1,4 +1,5 @@
 // [https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii]
+// [https://leetcode.com/articles/best-time-to-buy-and-sell-stock-iii]
 
 test('solve', () => {
   expect(solve([])).toEqual(0)
@@ -26,7 +27,7 @@ test('solve', () => {
   expect(solve([1, 3, 1, 5, 3, 1, 7])).toEqual(10)
 })
 
-const solve = xs => {
+const solvePrefixList = xs => {
   const len = xs.length
 
   const ltr = new Array(len).fill(0)
@@ -52,3 +53,20 @@ const solve = xs => {
 
   return profit
 }
+
+const solveConstantSpace = xs => {
+  let t1Cost = t2Cost = Infinity
+  let t1Profit = t2Profit = 0
+
+  for (const x of xs) {
+    t1Cost = Math.min(t1Cost, x)
+    t1Profit = Math.max(t1Profit, x - t1Cost)
+
+    t2Cost = Math.min(t2Cost, x - t1Profit)
+    t2Profit = Math.max(t2Profit, x - t2Cost)
+  }
+
+  return t2Profit
+}
+
+const solve = solveConstantSpace
