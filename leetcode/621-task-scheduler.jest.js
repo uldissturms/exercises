@@ -18,7 +18,7 @@ test('solve', () => {
 })
 
 // time: O(n), space: O(t), when n = |tasks|, t = {tasks}, (A - Z makes it 26 at most)
-const solve = (xs, n) => {
+const solveExtraSlots = (xs, n) => {
   const len = xs.length
 
   if (len < 2) {
@@ -61,3 +61,27 @@ const solve = (xs, n) => {
 
   return minL + Math.max(0, left - e)
 }
+
+const solveExtraIdle = (xs, n) => {
+  // count
+  let m = 0
+  const cs = new Map()
+  for (const x of xs) {
+    const c = (cs.get(x) || 0) + 1
+    cs.set(x, c)
+    if (c > m) {
+      m = c
+    }
+  }
+
+  const maxIdle = m - 1
+  let idle = maxIdle * (n + 1)
+
+  for (let [, v] of cs) {
+    idle -= Math.min(maxIdle, v)
+  }
+
+  return Math.max(0, idle) + xs.length
+}
+
+const solve = solveExtraIdle
