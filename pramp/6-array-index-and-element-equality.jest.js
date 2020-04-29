@@ -2,6 +2,7 @@ test('solve', () => {
   expect(solve([])).toEqual(-1)
 
   expect(solve([0])).toEqual(0)
+  expect(solve([1])).toEqual(-1)
   expect(solve([-1, 1])).toEqual(1)
   expect(solve([-1, 1, 4])).toEqual(1)
   expect(solve([-1, 0, 1, 3])).toEqual(3)
@@ -18,9 +19,13 @@ const solveR = xs => {
     const mI = Math.floor((sI + eI) / 2)
     const mV = xs[mI]
 
-    if (sI >= eI) {
+    if (sI > eI) {
+      return -1
+    }
+
+    if (sI === eI) {
       const sV = xs[sI]
-      return sI === sV ? sI : -1
+      return sV === sI ? sI : -1
     }
 
     if (mI === mV) {
