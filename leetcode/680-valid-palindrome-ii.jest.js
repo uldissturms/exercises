@@ -79,4 +79,35 @@ const solveI = xs => {
   return deleteChar((l, r) => [l + 1, r]) || deleteChar((l, r) => [l, r - 1])
 }
 
-const solve = solveI
+const isPalindrome = (l, r, xs) => {
+  while (l < r) {
+    const lx = xs[l]
+    const rx = xs[r]
+
+    if (lx !== rx) {
+      return false
+    }
+
+    l++
+    r--
+  }
+
+  return true
+}
+
+const solveCleaner = xs => {
+  let l = 0
+  let r = xs.length - 1
+  while (l < r) {
+    const lx = xs[l]
+    const rx = xs[r]
+    if (lx !== rx) {
+      return isPalindrome(l + 1, r, xs) || isPalindrome(l, r - 1, xs)
+    }
+    l++
+    r--
+  }
+  return true
+}
+
+const solve = solveCleaner
