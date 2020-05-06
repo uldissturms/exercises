@@ -1,3 +1,5 @@
+// [https://leetcode.com/problems/random-pick-index]
+
 test('solve', () => {
   expect(solve([1, 2, 3, 3, 3], 1)).toEqual(0)
   expect(solve([1, 2, 3, 3, 3], 2)).toEqual(1)
